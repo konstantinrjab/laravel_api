@@ -32,3 +32,6 @@ Route::post('logout', 'Auth\LoginController@logout');
 
 Route::get('articles', 'ArticleController@index');
 Route::get('articles/{article}', 'ArticleController@show');
+
+Route::get('categories', 'CategoryController@index');
+Route::get('categories/{category}', 'CategoryController@show');
