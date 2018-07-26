@@ -16,7 +16,8 @@ class CategoryWebController extends Controller
     
     public function show(Category $category)
     {
-        return $category;
+        return view('category', ['category' => $category]);
+//        return $category;
     }
     
     public function store(Request $request)
