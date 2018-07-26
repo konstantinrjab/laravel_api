@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-Use App\Article;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +21,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::post('articles', 'ArticleController@store');
-    Route::put('articles/{article}', 'ArticleController@update');
-    Route::delete('articles/{article}', 'ArticleController@delete');
+//    Route::post('articles', 'ArticleController@store');
+//    Route::put('articles/{article}', 'ArticleController@update');
+//    Route::delete('articles/{article}', 'ArticleController@delete');
     
     Route::post('categories', 'CategoryController@store');
     Route::put('categories/{category}', 'CategoryController@update');

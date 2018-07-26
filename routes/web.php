@@ -14,3 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('articles', 'ArticleController@index');
+Route::get('articles/{article}', 'ArticleController@show');
+
+Route::get('categories', 'CategoryWebController@index');
+Route::get('categories/{category}', 'CategoryWebController@show');
+
+Route::get('items', 'ItemController@index');
+Route::get('items/{item}', 'ItemController@show');
