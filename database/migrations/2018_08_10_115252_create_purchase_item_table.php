@@ -15,18 +15,18 @@ class CreatePurchaseItemTable extends Migration
     {
         Schema::create('purchase_item', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_purchase');
-            $table->unsignedInteger('id_item');
+            $table->unsignedInteger('purchase_id');
+            $table->unsignedInteger('item_id');
             $table->unsignedInteger('number');
             $table->unsignedInteger('price');
             $table->timestamps();
     
-            $table->foreign('id_purchase')
+            $table->foreign('purchase_id')
                 ->references('id')
                 ->on('parameters')
                 ->onDelete('cascade');
             
-            $table->foreign('id_item')
+            $table->foreign('item_id')
                 ->references('id')
                 ->on('items')
                 ->onDelete('cascade');

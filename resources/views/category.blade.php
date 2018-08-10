@@ -11,7 +11,8 @@
             </div>
         </div>
         <div class="row">
-            @foreach($items as $key => $item)
+
+            @foreach($category->items as $item)
                 <div class="col-4">
                     <div class="card mt-2 mb-2">
                         <a href="/items/{{$item->id}}">
@@ -31,7 +32,6 @@
                                 the card's content.</p>
                         </div>
                     </div>
-
                 </div>
             @endforeach
         </div>

@@ -15,17 +15,17 @@ class CreateItemParameterTable extends Migration
     {
         Schema::create('item_parameter', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_item');
-            $table->unsignedInteger('id_parameter');
+            $table->unsignedInteger('item_id');
+            $table->unsignedInteger('parameter_id');
             $table->string('value');
             $table->timestamps();
     
-            $table->foreign('id_item')
+            $table->foreign('item_id')
                 ->references('id')
                 ->on('items')
                 ->onDelete('cascade');
             
-            $table->foreign('id_parameter')
+            $table->foreign('parameter_id')
                 ->references('id')
                 ->on('parameters')
                 ->onDelete('cascade');

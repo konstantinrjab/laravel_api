@@ -15,10 +15,10 @@ class CreatePurchasesTable extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_user');
+            $table->unsignedInteger('user_id');
             $table->timestamps();
     
-            $table->foreign('id_user')
+            $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Item;
+use App\Item;
 use Illuminate\Http\Request;
 use App\Category;
 
@@ -17,9 +17,8 @@ class CategoryWebController extends Controller
     
     public function show(Category $category)
     {
-        $controller = new ItemController;
-        $items = $controller->index();
-        return view('category', ['category' => $category, 'items' => $items]);
+        $category = Category::with(['items'])->find($category->id);
+        return view('category', ['category' => $category]);
     }
     
     public function store(Request $request)

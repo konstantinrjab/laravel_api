@@ -19,9 +19,7 @@ class ItemWebController extends Controller
     
     public function show($id)
     {
-
         $item = Item::with(['category'])->find($id);
-        $item = new ItemResource($item);
         return view('item', ['item' => $item]);
     }
     

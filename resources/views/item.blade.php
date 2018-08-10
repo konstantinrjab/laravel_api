@@ -16,7 +16,7 @@
                      alt="">
             </div>
             <div class="col-6">
-
+                <?php echo '<pre>'; var_dump($item); echo '</pre>'; ?>
             </div>
         </div>
     </div>

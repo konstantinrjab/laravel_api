@@ -15,16 +15,16 @@ class CreateCategoryParameterTable extends Migration
     {
         Schema::create('category_parameter', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_category');
-            $table->unsignedInteger('id_parameter');
+            $table->unsignedInteger('category_id');
+            $table->unsignedInteger('parameter_id');
             $table->timestamps();
     
-            $table->foreign('id_category')
+            $table->foreign('category_id')
                 ->references('id')
                 ->on('categories')
                 ->onDelete('cascade');
     
-            $table->foreign('id_parameter')
+            $table->foreign('parameter_id')
                 ->references('id')
                 ->on('parameters')
                 ->onDelete('cascade');

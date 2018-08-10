@@ -17,7 +17,7 @@ class ItemsTableSeeder extends Seeder
 
         for ($i = 0; $i < 20; $i++) {
             Item::create([
-                'id_category' => rand(1, 20),
+                'category_id' => rand(1, 20),
                 'name' => $faker->word,
             ]);
         }
