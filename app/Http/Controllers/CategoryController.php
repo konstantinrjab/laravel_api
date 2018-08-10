@@ -21,7 +21,6 @@ class CategoryController extends Controller
     {
 //        var_dump($request);
 
-
         $category = Category::create($request->all());
 
         return response()->json($category, 201);
