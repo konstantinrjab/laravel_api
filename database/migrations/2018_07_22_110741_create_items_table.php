@@ -15,11 +15,11 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('category_id');
+            $table->unsignedInteger('id_category');
             $table->string('name');
             $table->timestamps();
 
-            $table->foreign('category_id')
+            $table->foreign('id_category')
                 ->references('id')
                 ->on('categories')
                 ->onDelete('cascade');
@@ -35,7 +35,7 @@ class CreateItemsTable extends Migration
     {
 
         Schema::dropIfExists('items', function (Blueprint $table) {
-            $table->dropForeign(['category_id']);
+            $table->dropForeign(['id_category']);
         });
     }
 }

@@ -16,7 +16,7 @@
                     <div class="card mt-2 mb-2">
                         <a href="/items/{{$item->id}}">
                             <img class="card-img-top"
-                                 src="https://pbs.twimg.com/profile_images/939537169647132672/8cevfMA8_400x400.jpg"
+                                 src="http://www.giftsnpromotions.com/images/no-image-large.png"
                                  alt="Card image cap">
                         </a>
                         <div class="card-body">
