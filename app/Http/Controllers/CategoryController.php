@@ -19,8 +19,6 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-//        var_dump($request);
-
         $category = Category::create($request->all());
 
         return response()->json($category, 201);
@@ -38,5 +36,9 @@ class CategoryController extends Controller
         $category->delete();
 
         return response()->json(null, 204);
+    }
+    
+    public function getWithItems($id){
+        return Category::with(['items'])->find($id);
     }
 }

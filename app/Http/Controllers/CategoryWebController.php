@@ -17,7 +17,6 @@ class CategoryWebController extends Controller
     
     public function show(Category $category)
     {
-        $category = Category::with(['items'])->find($category->id);
         return view('category', ['category' => $category]);
     }
     

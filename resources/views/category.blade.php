@@ -11,7 +11,6 @@
             </div>
         </div>
         <div class="row">
-
             @foreach($category->items as $item)
                 <div class="col-4">
                     <div class="card mt-2 mb-2">
