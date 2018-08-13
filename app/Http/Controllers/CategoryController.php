@@ -6,6 +6,7 @@ use App\Http\Resources\Categories as CategoriesResource;
 use App\Http\Resources\Category as CategoryResource;
 use Illuminate\Http\Request;
 use App\Category;
+use Illuminate\Support\Facades\Input;
 
 
 class CategoryController extends Controller
@@ -20,17 +21,17 @@ class CategoryController extends Controller
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",
-     *              @SWG\Schema(
-     *                  @SWG\Property(
-     *                      property="count",
-     *                      type="integer",
-     *                  ),
-     *                  @SWG\Property(
-     *                      property="categories",
-     *                      type="array",
-     *                      @SWG\Items(ref="#definitions/category")
-     *                  ),
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="count",
+     *                  type="integer",
      *              ),
+     *              @SWG\Property(
+     *                  property="categories",
+     *                  type="array",
+     *                  @SWG\Items(ref="#definitions/category")
+     *              ),
+     *          ),
      *     ),
      *     @SWG\Response(
      *          response=400,
@@ -48,6 +49,7 @@ class CategoryController extends Controller
     
     public function show(Category $category)
     {
+//        $category = Category::with('items')->get($id);
         return CategoryResource::getStructure($category);
     }
     
