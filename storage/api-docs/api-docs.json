@@ -1,0 +1,67 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "L5 Swagger API",
+        "description": "L5 Swagger API description",
+        "contact": {
+            "email": "darius@matulionis.lt"
+        },
+        "version": "1.0.0"
+    },
+    "host": "http://127.0.0.1:8000",
+    "basePath": "/api/",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "paths": {
+        "/categories": {
+            "get": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Get list of categories",
+                "description": "Returns list of categories",
+                "operationId": "getCategpriesList",
+                "responses": {
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "properties": {
+                                "category": {
+                                    "$ref": "#definitions/category"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "category": {
+            "properties": {
+                "id": {
+                    "description": "Category ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Category Name",
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "categories",
+            "description": "have products"
+        }
+    ]
+}
