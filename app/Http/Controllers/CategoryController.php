@@ -2,37 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Categories;
+use App\Http\Resources\Categories as CategoriesResource;
+use App\Http\Resources\Category as CategoryResource;
 use Illuminate\Http\Request;
 use App\Category;
 
-/** @SWG\Tag(
- *   name="categories",
- *   description="have products"
- * )
- *
- * @SWG\Definition(
- *   definition="category",
- *   @SWG\Property(
- *      property="id",
- *      type="integer",
- *      description="Category ID"
- *   ),
- *   @SWG\Property(
- *      property="name",
- *      type="string",
- *      description="Category Name"
- *   ),
- *   @SWG\Property(
- *      property="created_at",
- *      type="string",
- *   ),
- *   @SWG\Property(
- *      property="updated_at",
- *      type="string",
- *   ),
- * )
- */
+
 class CategoryController extends Controller
 {
     /**
@@ -47,10 +22,14 @@ class CategoryController extends Controller
      *          description="successful operation",
      *              @SWG\Schema(
      *                  @SWG\Property(
+     *                      property="count",
+     *                      type="integer",
+     *                  ),
+     *                  @SWG\Property(
      *                      property="categories",
      *                      type="array",
      *                      @SWG\Items(ref="#definitions/category")
-     *                       ),
+     *                  ),
      *              ),
      *     ),
      *     @SWG\Response(
@@ -63,14 +42,13 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $response = new Categories($categories, count($categories));
         
-        return $response;
+        return CategoriesResource::getStructure($categories, count($categories));
     }
     
     public function show(Category $category)
     {
-        return $category;
+        return CategoryResource::getStructure($category);
     }
     
     public function store(Request $request)

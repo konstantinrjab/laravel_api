@@ -28,6 +28,9 @@
                         "description": "successful operation",
                         "schema": {
                             "properties": {
+                                "count": {
+                                    "type": "integer"
+                                },
                                 "categories": {
                                     "type": "array",
                                     "items": {

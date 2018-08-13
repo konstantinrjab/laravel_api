@@ -15,11 +15,7 @@ class ItemController extends Controller
 
     public function show($id)
     {
-    
-//        $item = Item::with(['category'])->find($id);
-//        return $item;
-        
-        return new ItemResource(Item::find($id));
+        return ItemResource(Item::find($id));
     }
 
     public function store(Request $request)
