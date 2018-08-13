@@ -16,12 +16,14 @@ class Item extends JsonResource
 //        }
         
         return [
-            'id' => $item->id,
-            'name' => $item->name,
-            'category' =>  $item->category,
-            'parameters' => $item->parameters,
-            'created_at' => $item->created_at,
-            'updated_at' => $item->updated_at,
+            'item' => [
+                'id' => $item->id,
+                'name' => $item->name,
+                'category' => $item->category,
+                'parameters' => $item->parameters,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at,
+                ]
         ];
     }
 }

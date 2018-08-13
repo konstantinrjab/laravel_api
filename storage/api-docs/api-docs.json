@@ -45,6 +45,41 @@
                     }
                 }
             }
+        },
+        "/items/{itemID}/": {
+            "get": {
+                "tags": [
+                    "items"
+                ],
+                "summary": "Get product",
+                "description": "Returns product",
+                "operationId": "getItem",
+                "parameters": [
+                    {
+                        "name": "itemID",
+                        "in": "path",
+                        "description": "Item ID",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "properties": {
+                                "item": {
+                                    "type": "object",
+                                    "$ref": "#definitions/item"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -65,12 +100,40 @@
                     "type": "string"
                 }
             }
+        },
+        "item": {
+            "properties": {
+                "id": {
+                    "description": "Item ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Item Name",
+                    "type": "string"
+                },
+                "category": {
+                    "$ref": "#definitions/category"
+                },
+                "parameters": {
+                    "type": "object"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
         }
     },
     "tags": [
         {
             "name": "categories",
             "description": "have products"
+        },
+        {
+            "name": "items",
+            "description": "product"
         }
     ]
 }
