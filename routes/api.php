@@ -32,9 +32,9 @@ Route::post('logout', 'Auth\LoginController@logout');
 
 
 Route::group(['middleware' => 'responseApi'], function () {
-    Route::get('categories', 'CategoryController@index');
-    Route::get('categories/{category}', 'CategoryController@show');
+    Route::get('/categories', 'CategoryController@index');
+    Route::get('/categories/{category}', 'CategoryController@show');
     
-    Route::get('items', 'ItemController@index');
-    Route::get('items/{item}', 'ItemController@show');
+    Route::get('/items', 'ItemController@index');
+    Route::get('/items/{item}', 'ItemController@show');
 });

@@ -8,8 +8,8 @@
         },
         "version": "1.0.0"
     },
-    "host": "http://127.0.0.1:8000",
-    "basePath": "/api/",
+    "host": "127.0.0.1:8000/api",
+    "basePath": "/",
     "schemes": [
         "http",
         "https"
@@ -24,15 +24,21 @@
                 "description": "Returns list of categories",
                 "operationId": "getCategpriesList",
                 "responses": {
-                    "400": {
-                        "description": "Bad request",
+                    "200": {
+                        "description": "successful operation",
                         "schema": {
                             "properties": {
-                                "category": {
-                                    "$ref": "#definitions/category"
+                                "categories": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#definitions/category"
+                                    }
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad request"
                     }
                 }
             }

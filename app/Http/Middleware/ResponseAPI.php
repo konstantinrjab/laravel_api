@@ -6,9 +6,6 @@ use Closure;
 
 class ResponseAPI
 {
-    protected $except = [
-        'http://127.0.0.1/*',
-    ];
     
     /**
      * Handle an incoming request.

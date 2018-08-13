@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Categories;
 use Illuminate\Http\Request;
 use App\Category;
 
@@ -46,9 +47,13 @@ class CategoryController extends Controller
      *          description="successful operation",
      *              @SWG\Schema(
      *                  @SWG\Property(
-     *                  property="category",
-     *                  ref="#definitions/category"),
+     *                      property="categories",
+     *                      type="array",
+     *                      @SWG\Items(ref="#definitions/category")
+     *                       ),
      *              ),
+     *     ),
+     *     @SWG\Response(
      *          response=400,
      *          description="Bad request"),
      *     )
@@ -57,13 +62,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Category::all();
+        $categories = Category::all();
+        $response = new Categories($categories, count($categories));
+        
+        return $response;
     }
     
     public function show(Category $category)
     {
-        header("Access-Control-Allow-Origin:*");
-    
         return $category;
     }
     

@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 /**
  * @SWG\Swagger(
- *     basePath="/api/",
+ *     basePath="/",
  *     schemes={"http", "https"},
  *     host=L5_SWAGGER_CONST_HOST,
  *     @SWG\Info(
