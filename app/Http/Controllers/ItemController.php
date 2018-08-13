@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
+use DemeterChain\C;
 use Illuminate\Http\Request;
 use App\Item;
 use App\Http\Resources\Item as ItemResource;
@@ -15,7 +17,7 @@ class ItemController extends Controller
 
     public function show($id)
     {
-        return ItemResource(Item::find($id));
+        return ItemResource::getStructure(Item::find($id));
     }
 
     public function store(Request $request)
