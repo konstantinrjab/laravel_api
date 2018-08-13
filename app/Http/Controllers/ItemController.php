@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
 use DemeterChain\C;
 use Illuminate\Http\Request;
 use App\Item;
