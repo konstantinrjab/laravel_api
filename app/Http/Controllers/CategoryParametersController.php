@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Categories as CategoriesResource;
-use App\Http\Resources\Category as CategoryResource;
-use App\ItemParameter;
-use App\Parameter;
-use Illuminate\Http\Request;
+
 use App\Category;
-use Illuminate\Support\Facades\Input;
+use App\CategoryParameter;
 
-
-class ItemParametersController extends Controller
+class CategoryParametersController
 {
+
+    public function index()
+    {
+        $parameters = CategoryParameter::all();
+        
+        return $parameters;
+    }
+    
     /**
      * @SWG\Get(
-     *      path="/parameters",
-     *      operationId="getParametersList",
-     *      tags={"parameters"},
-     *      summary="Get list of parameters",
+     *      path="/category/{categoryID}/parameters",
+     *      operationId="getCategoryParametersList",
+     *      tags={"parameters, category"},
+     *      summary="Get category parameters",
      *      description="Returns list of parameters",
      *      @SWG\Response(
      *          response=200,
@@ -31,7 +34,7 @@ class ItemParametersController extends Controller
      *              @SWG\Property(
      *                  property="parameters",
      *                  type="array",
-     *                  @SWG\Items(ref="#definitions/parameter")
+     *                  @SWG\Items(ref="#definitions/categoryParameter")
      *              ),
      *          ),
      *     ),
@@ -42,16 +45,15 @@ class ItemParametersController extends Controller
      *
      * Returns list of projects
      */
-    public function index()
+    public function getByCategory($id)
     {
-        $parameters = Parameter::all();
-        
+        $parameters = CategoryParameter::where(['category_id' => $id])->all();
         return $parameters;
     }
     
-    public function show(ItemParameter $itemParameter)
+    public function show(CategoryParameter $categryParameter)
     {
-        return $itemParameter;
+        return $categryParameter;
     }
     
     public function store(Request $request)

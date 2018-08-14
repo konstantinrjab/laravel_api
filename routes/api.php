@@ -34,6 +34,8 @@ Route::group(['middleware' => 'responseApi'], function () {
     Route::get('/categories', 'CategoryController@index');
     Route::get('/categories/{category}', 'CategoryController@show');
     
+    Route::get('/categories/{id}/parameters', 'CategoryParametersController@getByCategory');
+    
     Route::get('/items', 'ItemController@index');
     Route::get('/items/{id}', 'ItemController@show');
     
