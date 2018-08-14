@@ -45,4 +45,9 @@ class Item extends Model
     {
         return $this->belongsTo('App\Category');
     }
+    
+    public function parameters()
+    {
+        return $this->belongsToMany('App\Parameter')->withPivot('value');
+    }
 }

@@ -15,11 +15,11 @@ class CategoryParameterTableSeeder extends Seeder
         $faker = \Faker\Factory::create();
         $value = (rand(0,1) ? $faker->word : rand(20,100));
         
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             CategoryParameter::create([
-                'item_id' => rand(1, 20),
+                'item_id' => rand(1, 30),
                 
-                'parameter_id' => rand(1, 20),
+                'parameter_id' => rand(1, 30),
                 'value' => $value
             ]);
         }

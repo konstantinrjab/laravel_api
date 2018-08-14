@@ -8,14 +8,7 @@ class Category
     {
         return [
             'category' => $category,
-            'items' => $category->items
-        ];
-    }
-    
-    public static function getStructureWithItems($category){
-        return [
-            'category' => $category,
-            'items' => $category->items
+            'items' => \App\Item::where('category_id', $category->id)
         ];
     }
 }
