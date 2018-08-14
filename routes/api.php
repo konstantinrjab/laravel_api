@@ -38,7 +38,5 @@ Route::group(['middleware' => 'responseApi'], function () {
     
     Route::get('/items', 'ItemController@index');
     Route::get('/items/{id}', 'ItemController@show');
-    
-    Route::get('/parameters', 'ParametersController@index');
-    Route::get('/parameters/{id}', 'ParametersController@show');
 });
+

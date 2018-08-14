@@ -62,7 +62,7 @@ class CategoryController extends Controller
         }
         if (Category::where(['name' => $request->name])->first()) {
             $error = Error::getStructure('name is busy');
-            return response()->json($error, 202);
+            return response()->json($error, 409);
         }
         $category = Category::create($request->all());
         
