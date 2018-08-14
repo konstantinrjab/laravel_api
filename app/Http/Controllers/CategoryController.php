@@ -44,13 +44,13 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
         
-        return CategoriesResource::getStructure($categories, count($categories));
+        return CategoriesResource::getCategoryStructure($categories, count($categories));
     }
     
-    public function show(Category $category)
+    public function show($id)
     {
-//        $category = Category::with('items')->get($id);
-        return CategoryResource::getStructure($category);
+        $category = Category::with('items')->find($id);
+        return $category;
     }
     
     public function store(Request $request)

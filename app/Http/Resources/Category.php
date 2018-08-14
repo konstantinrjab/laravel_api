@@ -8,7 +8,7 @@ class Category
     {
         return [
             'category' => $category,
-            'items' => $category->items
+//            'items' => \App\Item::where('category_id', $category->id)
         ];
     }
     
