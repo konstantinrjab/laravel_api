@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ItemParameter extends Model
 {
     protected $table = 'item_parameter';
+    protected $fillable = ['value'];
     
     public function item()
     {

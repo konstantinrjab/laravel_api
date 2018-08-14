@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Categories as CategoriesResource;
 use App\Http\Resources\Category as CategoryResource;
+use App\ItemParameter;
 use App\Parameter;
 use Illuminate\Http\Request;
 use App\Category;
@@ -48,9 +49,9 @@ class ItemParametersController extends Controller
         return $parameters;
     }
     
-    public function show($id)
+    public function show(ItemParameter $itemParameter)
     {
-        return Parameter::with('items')->find($id);
+        return $itemParameter;
     }
     
     public function store(Request $request)

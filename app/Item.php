@@ -48,6 +48,6 @@ class Item extends Model
     
     public function parameters()
     {
-        return $this->belongsToMany('App\Parameter');
+        return $this->belongsToMany('App\Parameter')->withPivot('value');
     }
 }
