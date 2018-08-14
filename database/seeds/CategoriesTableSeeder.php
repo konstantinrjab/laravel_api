@@ -12,8 +12,8 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = \Faker\Factory::create();
-
+        Category::truncate();
+        
         for ($i = 1; $i <= 20; $i++) {
             Category::create([
                 'name' => 'category_'.$i,

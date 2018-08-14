@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePurchasesTable extends Migration
+class CreateCategoryParameterTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,20 @@ class CreatePurchasesTable extends Migration
      */
     public function up()
     {
-        Schema::create('purchases', function (Blueprint $table) {
+        Schema::create('category_parameter', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('category_id');
+            $table->unsignedInteger('parameter_id');
             $table->timestamps();
     
-            $table->foreign('user_id')
+            $table->foreign('category_id')
                 ->references('id')
-                ->on('users')
+                ->on('categories')
+                ->onDelete('cascade');
+    
+            $table->foreign('parameter_id')
+                ->references('id')
+                ->on('parameters')
                 ->onDelete('cascade');
         });
     }
@@ -32,6 +38,6 @@ class CreatePurchasesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('purchases');
+        Schema::dropIfExists('category_parameter');
     }
 }

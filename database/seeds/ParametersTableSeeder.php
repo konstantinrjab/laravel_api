@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Item;
+use App\Parameter;
 
-class ItemsTableSeeder extends Seeder
+class ParametersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,12 +12,12 @@ class ItemsTableSeeder extends Seeder
      */
     public function run()
     {
-        Item::truncate();
+        Parameter::truncate();
+        
         $faker = \Faker\Factory::create();
 
         for ($i = 0; $i < 20; $i++) {
-            Item::create([
-                'category_id' => rand(1, 20),
+            Parameter::create([
                 'name' => $faker->word,
             ]);
         }

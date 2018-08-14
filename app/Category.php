@@ -3,13 +3,40 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Item;
 
+/** @SWG\Tag(
+ *   name="categories",
+ *   description="have products"
+ * )
+ *
+ * @SWG\Definition(
+ *   definition="category",
+ *   @SWG\Property(
+ *      property="id",
+ *      type="integer",
+ *      description="Category ID"
+ *   ),
+ *   @SWG\Property(
+ *      property="name",
+ *      type="string",
+ *      description="Category Name"
+ *   ),
+ *   @SWG\Property(
+ *      property="created_at",
+ *      type="string",
+ *   ),
+ *   @SWG\Property(
+ *      property="updated_at",
+ *      type="string",
+ *   ),
+ * )
+ */
 class Category extends Model
 {
     protected $fillable = ['name'];
 
-    public function items(){
-        return $this->hasMany(Item::class);
+    public function items()
+    {
+        return $this->hasMany('App\Item');
     }
 }

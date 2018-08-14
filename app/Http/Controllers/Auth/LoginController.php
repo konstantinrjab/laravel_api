@@ -50,4 +50,20 @@ class LoginController extends Controller
 
         return response()->json(['data' => 'User logged out.'], 200);
     }
+    
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+        
+        if ($this->attemptLogin($request)) {
+            $user = $this->guard()->user();
+            $user->generateToken();
+            
+            return response()->json([
+                'data' => $user->toArray(),
+            ]);
+        }
+        
+        return $this->sendFailedLoginResponse($request);
+    }
 }
