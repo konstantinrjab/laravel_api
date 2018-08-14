@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\Categories as CategoriesResource;
 use App\Http\Resources\Category as CategoryResource;
+use App\Http\Resources\Error;
 use Illuminate\Http\Request;
 use App\Category;
 use Illuminate\Support\Facades\Input;
@@ -55,6 +56,14 @@ class CategoryController extends Controller
     
     public function store(Request $request)
     {
+        if (!$request->name) {
+            $error = Error::getStructure('name required');
+            return response()->json($error, 400);
+        }
+        if (Category::where(['name' => $request->name])->first()) {
+            $error = Error::getStructure('name is busy');
+            return response()->json($error, 202);
+        }
         $category = Category::create($request->all());
         
         return response()->json($category, 201);

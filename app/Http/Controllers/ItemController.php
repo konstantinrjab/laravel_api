@@ -49,7 +49,7 @@ class ItemController extends Controller
     public function show($id)
     {
         $item = Item::with('category', 'parameters')->find($id);
-        return $item;
+        return ItemResource::getStructure($item);
     }
     
     public function store(Request $request)

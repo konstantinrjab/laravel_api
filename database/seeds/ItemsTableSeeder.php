@@ -15,7 +15,7 @@ class ItemsTableSeeder extends Seeder
         Item::truncate();
         $faker = \Faker\Factory::create();
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 80; $i++) {
             Item::create([
                 'category_id' => rand(1, 20),
                 'name' => $faker->word,
