@@ -4,11 +4,19 @@ namespace App\Http\Resources;
 
 class Category
 {
-    public static function getStructure($category)
+    public static function getCategoryStructure($category)
     {
         return [
-            'category' => $category,
-            'items' => \App\Item::where('category_id', $category->id)
+            'category' => $category
+        ];
+    }
+    public static function getCategoriesStructure($categories, $count)
+    {
+        return [
+            'category' => [
+                'count' => $count,
+                'categories' => $categories,
+            ]
         ];
     }
 }

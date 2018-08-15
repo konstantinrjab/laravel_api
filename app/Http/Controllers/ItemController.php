@@ -6,12 +6,18 @@ use DemeterChain\C;
 use Illuminate\Http\Request;
 use App\Item;
 use App\Http\Resources\Item as ItemResource;
+use Illuminate\Support\Facades\Input;
 
 class ItemController extends Controller
 {
     public function index()
     {
-        return Item::all();
+        if(Input::get('parameters')){
+            $items = Item::with('parameters')->get();
+        } else {
+            $items = Item::all();
+        }
+        return ItemResource::getItemsStructure($items);
     }
     
     /**
@@ -49,7 +55,7 @@ class ItemController extends Controller
     public function show($id)
     {
         $item = Item::with('category', 'parameters')->find($id);
-        return ItemResource::getStructure($item);
+        return ItemResource::getItemStructure($item);
     }
     
     public function store(Request $request)
