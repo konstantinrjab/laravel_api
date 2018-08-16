@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Category as CategoryResource;
-use App\Http\Resources\Error;
+use App\Http\Structures\Category as CategoryStructure;
+use App\Http\Structures\Error;
 use Illuminate\Http\Request;
 use App\Category;
 use Illuminate\Support\Facades\Input;
@@ -44,7 +44,7 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
         
-        return CategoryResource::getCategoriesStructure($categories, count($categories));
+        return CategoryStructure::getCategoriesStructure($categories, count($categories));
     }
     
     public function show($id)
@@ -59,7 +59,7 @@ class CategoryController extends Controller
             $items = null;
         }
 
-        return CategoryResource::getCategoryStructure($category, $items_count, $items);
+        return CategoryStructure::getCategoryStructure($category, $items_count, $items);
     }
     
     public function store(Request $request)

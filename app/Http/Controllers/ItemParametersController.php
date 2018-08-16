@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Categories as CategoriesResource;
-use App\Http\Resources\Category as CategoryResource;
+use App\Http\Structures\Categories as CategoriesResource;
+use App\Http\Structures\Category as CategoryResource;
 use App\ItemParameter;
 use App\Parameter;
 use Illuminate\Http\Request;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use DemeterChain\C;
 use Illuminate\Http\Request;
 use App\Item;
-use App\Http\Resources\Item as ItemResource;
+use App\Http\Structures\Item as ItemResource;
 use Illuminate\Support\Facades\Input;
 
 class ItemController extends Controller

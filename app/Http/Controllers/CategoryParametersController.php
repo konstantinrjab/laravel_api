@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 
-use App\Category;
 use App\CategoryParameter;
+use App\Http\Structures\CategoryParameter as CategoryParameterStructure;
 
 class CategoryParametersController
 {
@@ -13,7 +13,7 @@ class CategoryParametersController
     {
         $parameters = CategoryParameter::all();
         
-        return $parameters;
+        return CategoryParameterStructure::getParametersStructure($parameters);
     }
     
     /**
@@ -40,25 +40,29 @@ class CategoryParametersController
      *     ),
      *     @SWG\Response(
      *          response=400,
-     *          description="Bad request"),
-     *     )
+     *          description="Bad request"
+     *      ),
+     * )
      *
-     * Returns list of projects
+     * @param $id integer
+     * @return array
+     * Returns list of objects
      */
     public function getByCategory($id)
     {
         $parameters = CategoryParameter::where(['category_id' => $id])->get();
-        return $parameters;
+        return CategoryParameterStructure::getParametersStructure($parameters);
     }
     
-    public function show(CategoryParameter $categryParameter)
+    public function show($id)
     {
-        return $categryParameter;
+        $parameter = CategoryParameter::find($id);
+        return CategoryParameterStructure::getParameterStructure($parameter);
     }
     
     public function store(Request $request)
     {
-        $parameter = Parameter::create($request->all());
+        $parameter = CategoryParameter::create($request->all());
         
         return response()->json($parameter, 201);
     }
