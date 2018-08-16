@@ -49,8 +49,17 @@ class CategoryController extends Controller
     
     public function show($id)
     {
-        $category = Category::with('items')->find($id);
-        return CategoryResource::getCategoryStructure($category);
+        if(Input::get('items')){
+            $category = Category::with('items')->find($id);
+            $items_count = count($category->items);
+            $items = $category->items;
+        } else {
+            $category = Category::withCount('items')->find($id);
+            $items_count = $category->items_count;
+            $items = null;
+        }
+
+        return CategoryResource::getCategoryStructure($category, $items_count, $items);
     }
     
     public function store(Request $request)

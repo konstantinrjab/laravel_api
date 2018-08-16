@@ -47,7 +47,7 @@ class CategoryParametersController
      */
     public function getByCategory($id)
     {
-        $parameters = CategoryParameter::where(['category_id' => $id])->all();
+        $parameters = CategoryParameter::where(['category_id' => $id])->get();
         return $parameters;
     }
     

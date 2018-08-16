@@ -14,9 +14,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         User::truncate();
-
         $faker = \Faker\Factory::create();
-
         $password = Hash::make('toptal');
 
         User::create([

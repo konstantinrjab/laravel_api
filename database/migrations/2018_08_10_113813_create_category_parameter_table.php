@@ -17,6 +17,7 @@ class CreateCategoryParameterTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('category_id');
             $table->unsignedInteger('parameter_id');
+            $table->string('value');
             $table->timestamps();
     
             $table->foreign('category_id')

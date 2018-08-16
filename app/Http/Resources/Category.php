@@ -4,12 +4,24 @@ namespace App\Http\Resources;
 
 class Category
 {
-    public static function getCategoryStructure($category)
+    public static function getCategoryStructure($category, $count, $items = null)
     {
-        return [
-            'category' => $category
+        $structure = [
+            'category' => [
+                'id' => $category->id,
+                'name' => $category->name,
+                'created_at' => $category->created_at,
+                'updated_at' => $category->created_at,
+                'items_count' => $count,
+            ],
         ];
+        if ($items) {
+            $structure['category']['items'] = $items;
+        }
+
+        return $structure;
     }
+
     public static function getCategoriesStructure($categories, $count)
     {
         return [

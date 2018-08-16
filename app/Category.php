@@ -39,4 +39,8 @@ class Category extends Model
     {
         return $this->hasMany('App\Item');
     }
+    public function parameters()
+    {
+        return $this->hasMany('App\CategoryParameter');
+    }
 }
