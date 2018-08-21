@@ -44,7 +44,7 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
         
-        return CategoryStructure::getCategoriesStructure($categories, count($categories));
+        return CategoryStructure::getCategoriesStructure($categories);
     }
     
     public function show($id)
@@ -59,7 +59,7 @@ class CategoryController extends Controller
             $items = null;
         }
 
-        return CategoryStructure::getCategoryStructure($category, $items_count, $items);
+        return CategoryStructure::getCategoryStructure($category, $items);
     }
     
     public function store(Request $request)
@@ -74,7 +74,7 @@ class CategoryController extends Controller
         }
         $category = Category::create($request->all());
         
-        return response()->json($category, 201);
+        return CategoryStructure::getCategoryStructure($category);
     }
     
     public function update(Request $request, Category $category)

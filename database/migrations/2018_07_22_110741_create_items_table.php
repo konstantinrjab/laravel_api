@@ -17,6 +17,8 @@ class CreateItemsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('category_id');
             $table->string('name');
+            $table->string('image');
+            $table->unsignedInteger('price')->default(null);
             $table->timestamps();
 
             $table->foreign('category_id')

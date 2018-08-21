@@ -12,7 +12,6 @@ class CategoryParametersController
     public function index()
     {
         $parameters = CategoryParameter::all();
-        
         return CategoryParameterStructure::getParametersStructure($parameters);
     }
     

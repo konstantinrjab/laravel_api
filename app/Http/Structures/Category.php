@@ -4,17 +4,18 @@ namespace App\Http\Structures;
 
 class Category
 {
-    public static function getCategoryStructure($category, $count, $items = null)
+    public static function getCategoryStructure($category, $items = null)
     {
         $structure = [
             'category' => [
                 'id' => $category->id,
                 'name' => $category->name,
-                'created_at' => $category->created_at,
-                'updated_at' => $category->created_at,
-                'items_count' => $count,
+                'created_at' => $category->created_at->format('Y-m-d'),
+                'updated_at' => $category->updated_at->format('Y-m-d'),
             ],
         ];
+        self::_addItemsCount($category, $structure);
+
         if ($items) {
             $structure['category']['items'] = $items;
         }
@@ -22,13 +23,22 @@ class Category
         return $structure;
     }
 
-    public static function getCategoriesStructure($categories, $count)
+    public static function getCategoriesStructure($categories)
     {
         return [
-            'category' => [
-                'count' => $count,
+            'categories' => [
+                'categories_count' => count($categories),
                 'categories' => $categories,
             ]
         ];
+    }
+
+    private static function _addItemsCount($category, &$structure){
+        if($category->items){
+            $count = count($category->items);
+        } else {
+            $count = 0;
+        }
+        $structure['category']['items_count'] = $count;
     }
 }
