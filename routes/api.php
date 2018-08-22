@@ -24,6 +24,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('categories/', 'CategoryController@store');
     Route::put('categories/{category}', 'CategoryController@update');
     Route::delete('categories/{category}/', 'CategoryController@delete');
+
+    Route::post('items/', 'ItemController@store');
+    Route::put('items/{id}', 'ItemController@update');
+    Route::delete('items/{id}/', 'ItemController@delete');
 });
 
 Route::post('register', 'Auth\RegisterController@register');

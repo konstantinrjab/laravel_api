@@ -2,9 +2,7 @@
 
 namespace App\Http\Structures;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class Item extends JsonResource
+class Item
 {
     public static function getItemsStructure($items)
     {
@@ -16,7 +14,15 @@ class Item extends JsonResource
     public static function getItemStructure($item)
     {
         return [
-            'item' => $item
+            'item' => [
+                'id' => $item->id,
+                'name' => $item->name,
+                'image' => $item->image,
+                'created_at' => $item->created_at->format('Y-m-d'),
+                'updated_at' => $item->updated_at->format('Y-m-d'),
+                'category' => $item->category,
+                'parameters' => $item->parameters,
+            ]
         ];
     }
 }

@@ -22,13 +22,11 @@ class CreateCategoryParameterTable extends Migration
     
             $table->foreign('category_id')
                 ->references('id')
-                ->on('categories')
-                ->onDelete('cascade');
+                ->on('categories');
     
             $table->foreign('parameter_id')
                 ->references('id')
-                ->on('parameters')
-                ->onDelete('cascade');
+                ->on('parameters');
         });
     }
 
