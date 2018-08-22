@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\DB;
+use App\Category;
 
 
 /**
@@ -28,11 +29,25 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected function validateParameters($tableName, $requestParameters){
+    protected function validateParameters($tableName, $requestParameters, $relations = array())
+    {
+        $missingParameters = $this->_getMissingParameters($tableName, $requestParameters);
+        if ($missingParameters) {
+            return $missingParameters;
+        }
+        if (!empty($relations)) {
+            $invalidRelations = $this->_getInvalidRelations($requestParameters, $relations);
+            return $invalidRelations;
+        }
 
-        return $this->_getMissingParameters($tableName, $requestParameters);
+        return false;
     }
 
+    /**
+     * @param $tableName
+     * @param $requestParameters
+     * @return array|bool
+     */
     private function _getMissingParameters($tableName, $requestParameters)
     {
         $requestParameters = array_filter($requestParameters);
@@ -47,5 +62,35 @@ class Controller extends BaseController
         $missingKeys = array_diff($requiredKeys, $requestKeys);
 
         return (!empty($missingKeys) ? $missingKeys : false);
+    }
+
+    /**
+     * @param $requestParameters
+     * @param $relations
+     * @return array|bool
+     */
+    private function _getInvalidRelations($requestParameters, $relations)
+    {
+        foreach ($relations as $column => $tableName) {
+            $exist = DB::table($tableName)
+                ->where('id', '=', $requestParameters[$column])->count();
+            if (!$exist) {
+                return $column;
+            }
+        }
+        return false;
+    }
+
+    protected function checkInvalidUnique($tableName, $fields)
+    {
+        $query = DB::table($tableName);
+        foreach ($fields as $key => $value) {
+            $query->where($key, '=', $value);
+        }
+        $result = $query->count();
+        if($result){
+            return 'unique value is busy';
+        }
+        return false;
     }
 }

@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Structures\Error;
-use DemeterChain\C;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Item;
 use App\Http\Structures\Item as ItemResource;
 use Illuminate\Support\Facades\Input;
+use App\Category;
 
 class ItemController extends Controller
 {
@@ -60,21 +60,37 @@ class ItemController extends Controller
     public function show($id)
     {
         $item = Item::with('category', 'parameters')->find($id);
-        return ItemResource::getItemStructure($item);
+        return ItemResource::getItemStructure($item, true);
     }
 
     public function store(Request $request)
     {
-        $invalidParameters = $this->validateParameters($this::TABLE_NAME_ITEMS, $request->all());
-        if($invalidParameters){
-            return Error::getStructure('Parameters are invalid or missing: '.implode(', ', $invalidParameters));
+        $requestParameters = $request->all();
+
+        $validateErrors = $this->validateParameters(
+            $this::TABLE_NAME_ITEMS,
+            $requestParameters,
+            ['category_id' => 'categories']
+        );
+        if($validateErrors){
+            return Error::getStructure(
+                'Parameters are invalid or missing: '.implode(', ', $validateErrors)
+            );
+        }
+        $unqueError = $this->checkInvalidUnique(
+            $this::TABLE_NAME_ITEMS,
+            ['sku' => $requestParameters['sku']]
+        );
+        if ($unqueError){
+            return Error::getStructure('Unique parameter is busy');
         }
 
         try{
             $item = Item::create($request->all());
             return ItemResource::getItemStructure($item);
         } catch (QueryException $e){
-            return Error::getStructure('invalid parameters', $e->getMessage());
+//            return Error::getStructure('Unexpected error');
+            return Error::getStructure($e);
         }
     }
 
@@ -90,10 +106,5 @@ class ItemController extends Controller
         $item->delete();
 
         return response()->json(null, 204);
-    }
-
-    private function _checkRequestParameters($parameters)
-    {
-        return Error::getStructure('invalid parameters');
     }
 }

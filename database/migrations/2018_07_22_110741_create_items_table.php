@@ -17,6 +17,7 @@ class CreateItemsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('category_id')->nullable(false);
             $table->string('name')->nullable(false);
+            $table->string('sku')->unique();
             $table->string('image')->nullable()->default(null);
             $table->unsignedInteger('price')->nullable()->default(null);
             $table->timestamps();

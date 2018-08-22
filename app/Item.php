@@ -41,7 +41,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Item extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'category_id', 'image', 'price', 'sku'];
 
     public function category()
     {

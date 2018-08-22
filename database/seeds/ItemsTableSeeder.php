@@ -19,6 +19,7 @@ class ItemsTableSeeder extends Seeder
             Item::create([
                 'category_id' => rand(1, 20),
                 'name' => $faker->word,
+                'sku' => $faker->uuid,
                 'image' => 'image_url',
                 'price' => rand(50, 500)
             ]);
