@@ -85,10 +85,15 @@ class ItemParametersController extends Controller
         return response()->json($parameter, 200);
     }
     
-    public function delete(Parameter $parameter)
+    public function delete($itemID, Parameter $parameter)
     {
-        $parameter->delete();
-        
-        return response()->json(null, 204);
+        try {
+            dd(12);
+            $parameter->delete();
+            return response()->json('success', 204);
+        } catch (QueryException $e) {
+            dd(33);
+            return Error::getStructure('Unexpected error');
+        }
     }
 }
