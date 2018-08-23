@@ -65,32 +65,32 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-        $requestParameters = $request->all();
+        $values = [
+            'category_id' => category_id,
+            'name' => $request->name,
+            'sku' => $request->sku,
+            'image' => $request->image,
+            'price' => $request->price,
+        ];
 
-        $validateErrors = $this->validateParameters(
-            $this::TABLE_NAME_ITEMS,
-            $requestParameters,
-            ['category_id' => 'categories']
-        );
-        if($validateErrors){
+        $validator = Validator::make($values, [
+            'category_id' => ['required', 'exists:categories,id'],
+            'name' => 'required',
+            'sku' => ['required', 'unique:items'],
+            'price' => ['integer', 'min:0']
+        ]);
+
+        if ($validator->fails()) {
             return Error::getStructure(
-                'Parameters are invalid or missing: '.implode(', ', $validateErrors)
+                $validator->errors()
             );
-        }
-        $uniqueError = $this->checkBusyUnique(
-            $this::TABLE_NAME_ITEMS,
-            ['sku' => $requestParameters['sku']]
-        );
-        if ($uniqueError){
-            return Error::getStructure('Unique parameter is busy');
         }
 
         try{
             $item = Item::create($request->all());
             return ItemResource::getItemStructure($item);
         } catch (QueryException $e){
-//            return Error::getStructure('Unexpected error');
-            return Error::getStructure($e);
+            return Error::getStructure('Unexpected error');
         }
     }
 

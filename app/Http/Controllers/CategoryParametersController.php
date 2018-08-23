@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CategoryParameter;
-use App\Http\Requests\AddCategoryParameterRequest;
+use Illuminate\Database\QueryException;
 use App\Http\Structures\CategoryParameter as CategoryParameterStructure;
 use App\Http\Structures\Error;
 use Illuminate\Http\Request;
@@ -84,12 +84,15 @@ class CategoryParametersController extends Controller
 
         if ($validator->fails()) {
             return Error::getStructure(
-                 $validator->errors()
+                $validator->errors()
             );
         }
-
-        $parameter = CategoryParameter::create($values);
-        return CategoryParameterStructure::getParameterStructure($parameter);
+        try {
+            $parameter = CategoryParameter::create($values);
+            return CategoryParameterStructure::getParameterStructure($parameter);
+        } catch (QueryException $e) {
+            return Error::getStructure('Unexpected error');
+        }
     }
 
     public function update(Request $request, Parameter $parameter)

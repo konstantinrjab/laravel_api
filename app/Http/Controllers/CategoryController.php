@@ -7,6 +7,8 @@ use App\Http\Structures\Error;
 use Illuminate\Http\Request;
 use App\Category;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Database\QueryException;
+use Validator;
 
 
 class CategoryController extends Controller
@@ -62,17 +64,26 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        if (!$request->name) {
-            $error = Error::getStructure('name required');
-            return response()->json($error, 400);
-        }
-        if (Category::where(['name' => $request->name])->first()) {
-            $error = Error::getStructure('name is busy');
-            return response()->json($error, 409);
-        }
-        $category = Category::create($request->all());
+        $values = [
+            'name' => $request->name,
+        ];
 
-        return CategoryStructure::getCategoryStructure($category);
+        $validator = Validator::make($values, [
+            'name' => 'required|unique:categories,name',
+        ]);
+
+        if ($validator->fails()) {
+            return Error::getStructure(
+                $validator->errors()
+            );
+        }
+
+        try {
+            $category = Category::create($request->all());
+            return CategoryStructure::getCategoryStructure($category);
+        } catch (QueryException $e) {
+            return Error::getStructure('Unexpected error');
+        }
     }
 
     public function update(Request $request, Category $category)
