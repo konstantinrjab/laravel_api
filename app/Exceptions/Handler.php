@@ -60,7 +60,6 @@ class Handler extends ExceptionHandler
                 'error' => 'Incorrect url'
             ], 404);
         }
-        dd(123);
 
         return parent::render($request, $exception);
     }

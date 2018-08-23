@@ -30,7 +30,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('items/{id}/', 'ItemController@delete');
 
     Route::post('/categories/{categoryID}/parameters/', 'CategoryParametersController@store');
-//    Route::post('/categories/{categoryID}/parameters/{parameterID}', 'CategoryParametersController@update');
+    Route::post('/categories/{categoryID}/parameters/{parameterID}', 'CategoryParametersController@update');
     Route::delete('/categories/parameters/{id}', 'CategoryParametersController@delete');
 });
 

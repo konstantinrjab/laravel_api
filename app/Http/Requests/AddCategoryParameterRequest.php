@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Requests324213;
-use App\Http\Requests324213\APIRequest;
-use Illuminate\Contracts\Validation\Validator;
+namespace App\Http\Requests;
+use Illuminate\Validation\Validator;
 use App\CategoryParameter;
 use App\Http\Structures\CategoryParameter as CategoryParameterStructure;
 use App\Http\Structures\Error;
@@ -32,15 +31,12 @@ class AddCategoryParameterRequest extends APIRequest
         ];
     }
 
-    public function store(Request $request)
+    public function add($categoryID, Request $request)
     {
-        return 222;
-        $values = Input::all();
         $validator = Validator::make($request->all(), [
             'category_id' => 'required',
             'parameter_id' => 'required',
         ]);
-        return 123;
         if ($validator->fails()) {
             return Error::getStructure(
                 'Parameters are invalid or missing: '.$validator

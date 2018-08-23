@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\CategoryParameter;
+use App\Http\Requests\AddCategoryParameterRequest;
 use App\Http\Structures\CategoryParameter as CategoryParameterStructure;
 use App\Http\Structures\Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Contracts\Validation\Validator;
+use Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CategoryParametersController extends Controller
 {
     const TABLE_NAME = 'category_parameter';
 
-    protected function failedValidation(Validator $validator) {
+    protected function failedValidation(Validator $validator)
+    {
         throw new HttpResponseException(response()->json($validator->errors(), 422));
     }
 
@@ -68,26 +70,22 @@ class CategoryParametersController extends Controller
         return CategoryParameterStructure::getParameterStructure($parameter);
     }
 
-    public function store($categoryID)
+    public function store($categoryID, Request $request)
     {
-//        $values = Input::all();
-//        $validator = Validator::make($request->all(), [
-//                'category_id' => 'required',
-//                'parameter_id' => 'required',
-//            ]);
-//        return '123123';
+//        $handler = new AddCategoryParameterRequest();
+//        $handler->add($categoryID, $request);
 
+        $values = Input::all();
+        $validator = Validator::make($request->all(), [
+            'category_id' => 'required',
+            'parameter_id' => 'required',
+        ]);
 
-//        if ($validator->fails()) {
-//            return Error::getStructure(
-//                'Parameters are invalid or missing: '.$validator
-//            );
-
-
-//            return redirect('post/create')
-//                ->withErrors($validator)
-//                ->withInput();
-//        }
+        if ($validator->fails()) {
+            return Error::getStructure(
+                'Parameters are invalid or missing: ' . $validator->errors()
+            );
+        }
 //        $validateErrors = $this->validateParameters(
 //            $this::TABLE_NAME,
 //            $values,
@@ -99,18 +97,18 @@ class CategoryParametersController extends Controller
 
         return response()->json('ololo', 201);
     }
-    
+
     public function update(Request $request, Parameter $parameter)
     {
         $parameter->update($request->all());
-        
+
         return response()->json($parameter, 200);
     }
-    
+
     public function delete(Parameter $parameter)
     {
         $parameter->delete();
-        
+
         return response()->json(null, 204);
     }
 }
