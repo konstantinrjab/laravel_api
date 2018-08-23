@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
-
 use App\CategoryParameter;
+use Illuminate\Database\QueryException;
 use App\Http\Structures\CategoryParameter as CategoryParameterStructure;
+use App\Http\Structures\Error;
+use Illuminate\Http\Request;
+use Validator;
 
-class CategoryParametersController
+class CategoryParametersController extends Controller
 {
+    const TABLE_NAME = 'category_parameter';
 
     public function index()
     {
         $parameters = CategoryParameter::all();
-        return CategoryParameterStructure::getParametersStructure($parameters);
+        return CategoryParameterStructure::getMany($parameters);
     }
-    
+
     /**
      * @SWG\Get(
      *      path="/category/{categoryID}/parameters",
@@ -47,36 +51,54 @@ class CategoryParametersController
      * @return array
      * Returns list of objects
      */
-    public function getByCategory($id)
+    public function getByCategory($categoryID)
     {
-        $parameters = CategoryParameter::where(['category_id' => $id])->get();
-        return CategoryParameterStructure::getParametersStructure($parameters);
+        $parameters = CategoryParameter::where(['category_id' => $categoryID])->get();
+        return CategoryParameterStructure::getMany($parameters);
     }
-    
-    public function show($id)
+
+    public function show($categoryParameterID)
     {
-        $parameter = CategoryParameter::find($id);
-        return CategoryParameterStructure::getParameterStructure($parameter);
+        $parameter = CategoryParameter::find($categoryParameterID);
+        return CategoryParameterStructure::getOne($parameter);
     }
-    
-    public function store(Request $request)
+
+    public function store($categoryID, Request $request)
     {
-        $parameter = CategoryParameter::create($request->all());
-        
-        return response()->json($parameter, 201);
+        $values = [
+            'category_id' => $categoryID,
+            'parameter_id' => $request->parameter_id
+        ];
+
+        $validator = Validator::make($values, [
+            'category_id' => ['required', 'exists:categories,id'],
+            'parameter_id' => ['required', 'exists:parameters,id'],
+        ]);
+
+        if ($validator->fails()) {
+            return Error::getStructure(
+                $validator->errors()
+            );
+        }
+        try {
+            $parameter = CategoryParameter::create($values);
+            return CategoryParameterStructure::getParameterStructure($parameter);
+        } catch (QueryException $e) {
+            return Error::getStructure('Unexpected error');
+        }
     }
-    
+
     public function update(Request $request, Parameter $parameter)
     {
         $parameter->update($request->all());
-        
+
         return response()->json($parameter, 200);
     }
-    
+
     public function delete(Parameter $parameter)
     {
         $parameter->delete();
-        
+
         return response()->json(null, 204);
     }
 }

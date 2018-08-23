@@ -2,24 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use DemeterChain\C;
+use App\Http\Structures\Error;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Item;
 use App\Http\Structures\Item as ItemResource;
-use Illuminate\Support\Facades\Input;
+use Validator;
 
 class ItemController extends Controller
 {
+    const TABLE_NAME_ITEMS = 'items';
+
     public function index()
     {
-        if(Input::get('parameters')){
-            $items = Item::with('parameters')->get();
-        } else {
-            $items = Item::all();
-        }
-        return ItemResource::getItemsStructure($items);
+        $items = Item::all();
+        return ItemResource::getMany($items);
     }
-    
+
     /**
      * @SWG\Get(
      *      path="/items/{itemID}/",
@@ -27,7 +26,7 @@ class ItemController extends Controller
      *      tags={"items"},
      *      summary="Get product",
      *      description="Returns product",
-     *      @SWG\Parameter(
+     *      @SWG\ItemParameter(
      *           name="itemID",
      *           in="path",
      *           description="Item ID",
@@ -52,30 +51,54 @@ class ItemController extends Controller
      *
      * Returns item
      */
-    public function show($id)
+    public function show($itemID)
     {
-        $item = Item::with('category', 'parameters')->find($id);
-        return ItemResource::getItemStructure($item);
+        $item = Item::with('category', 'parameters')->find($itemID);
+        return ItemResource::getOne($item, true);
     }
-    
+
     public function store(Request $request)
     {
-        $item = Item::create($request->all());
-        
-        return response()->json($item, 201);
+        $values = [
+            'category_id' => $request->category_id,
+            'name' => $request->name,
+            'sku' => $request->sku,
+            'image' => $request->image,
+            'price' => $request->price,
+        ];
+
+        $validator = Validator::make($values, [
+            'category_id' => 'required|exists:categories,id',
+            'name' => 'required',
+            'sku' => 'required|unique:items',
+            'price' => 'integer|min:0'
+        ]);
+
+        if ($validator->fails()) {
+            return Error::getStructure(
+                $validator->errors()
+            );
+        }
+
+        try {
+            $item = Item::create($values);
+            return ItemResource::getOne($item);
+        } catch (QueryException $e) {
+            return Error::getStructure('Unexpected error');
+        }
     }
-    
+
     public function update(Request $request, Item $item)
     {
         $item->update($request->all());
-        
+
         return response()->json($item, 200);
     }
-    
+
     public function delete(Item $item)
     {
         $item->delete();
-        
+
         return response()->json(null, 204);
     }
 }

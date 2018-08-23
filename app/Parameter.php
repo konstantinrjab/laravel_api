@@ -14,12 +14,12 @@ use Illuminate\Database\Eloquent\Model;
  *   @SWG\Property(
  *      property="id",
  *      type="integer",
- *      description="Parameter ID"
+ *      description="ItemParameter ID"
  *   ),
  *   @SWG\Property(
  *      property="name",
  *      type="string",
- *      description="Parameter Name"
+ *      description="ItemParameter Name"
  *   ),
  *   @SWG\Property(
  *      property="created_at",

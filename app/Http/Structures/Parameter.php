@@ -8,8 +8,7 @@
 
 namespace App\Http\Structures;
 
-
-class CategoryParameter extends Structure
+class Parameter extends Structure
 {
     const KEY_ONE = 'parameter';
     const KEY_MANY = 'parameters';
@@ -26,11 +25,12 @@ class CategoryParameter extends Structure
 
     public static function getOne($parameter)
     {
+        $key = self::getKeyOne();
+
         return [
-            'parameter' => [
+            $key => [
                 'id' => $parameter->id,
-                'category_id' => $parameter->category_id,
-                'parameter_id' => $parameter->parameter_id,
+                'name' => $parameter->name,
                 'created_at' => $parameter->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $parameter->updated_at->format('Y-m-d H:i:s'),
             ],

@@ -2,21 +2,38 @@
 
 namespace App\Http\Structures;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class Item extends JsonResource
+class Item extends Structure
 {
-    public static function getItemsStructure($items)
+    const KEY_ONE = 'item';
+    const KEY_MANY = 'items';
+
+    public static function getKeyOne()
     {
-        return [
-            'items' => $items
-        ];
+        return self::KEY_ONE;
     }
 
-    public static function getItemStructure($item)
+    public static function getKeyMany()
     {
-        return [
-            'item' => $item
+        return self::KEY_MANY;
+    }
+
+    public static function getOne($item, $parameters = false)
+    {
+        $structure = [
+            'item' => [
+                'id' => $item->id,
+                'name' => $item->name,
+                'sku' => $item->sku,
+                'image' => $item->image,
+                'created_at' => $item->created_at->format('Y-m-d H:i:s'),
+                'updated_at' => $item->updated_at->format('Y-m-d H:i:s'),
+                'category' => $item->category,
+            ]
         ];
+        if ($parameters) {
+            $structure['item']['parameters'] = $item->parameters;
+        }
+
+        return $structure;
     }
 }

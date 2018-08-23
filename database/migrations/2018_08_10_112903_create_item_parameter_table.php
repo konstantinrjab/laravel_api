@@ -22,13 +22,11 @@ class CreateItemParameterTable extends Migration
     
             $table->foreign('item_id')
                 ->references('id')
-                ->on('items')
-                ->onDelete('cascade');
+                ->on('items');
             
             $table->foreign('parameter_id')
                 ->references('id')
-                ->on('parameters')
-                ->onDelete('cascade');
+                ->on('parameters');
         });
     }
 

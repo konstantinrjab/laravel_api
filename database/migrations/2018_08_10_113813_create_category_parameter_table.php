@@ -17,18 +17,15 @@ class CreateCategoryParameterTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('category_id');
             $table->unsignedInteger('parameter_id');
-            $table->string('value');
             $table->timestamps();
     
             $table->foreign('category_id')
                 ->references('id')
-                ->on('categories')
-                ->onDelete('cascade');
+                ->on('categories');
     
             $table->foreign('parameter_id')
                 ->references('id')
-                ->on('parameters')
-                ->onDelete('cascade');
+                ->on('parameters');
         });
     }
 

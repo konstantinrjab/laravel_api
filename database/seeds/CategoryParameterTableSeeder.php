@@ -19,7 +19,6 @@ class CategoryParameterTableSeeder extends Seeder
             CategoryParameter::create([
                 'category_id' => rand(1, 30),
                 'parameter_id' => rand(1, 30),
-                'value' => $value
             ]);
         }
     }
