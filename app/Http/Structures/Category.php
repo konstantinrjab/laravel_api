@@ -2,12 +2,27 @@
 
 namespace App\Http\Structures;
 
-class Category
+class Category extends Structure
 {
-    public static function getCategoryStructure($category, $items = null)
+    const KEY_ONE = 'category';
+    const KEY_MANY = 'categories';
+
+    public static function getKeyOne()
     {
+        return self::KEY_ONE;
+    }
+
+    public static function getKeyMany()
+    {
+        return self::KEY_MANY;
+    }
+
+    public static function getOne($category, $items = null)
+    {
+        $key = self::getKeyOne();
+
         $structure = [
-            'category' => [
+            $key => [
                 'id' => $category->id,
                 'name' => $category->name,
                 'created_at' => $category->created_at->format('Y-m-d H:i:s'),
@@ -21,16 +36,6 @@ class Category
         }
 
         return $structure;
-    }
-
-    public static function getCategoriesStructure($categories)
-    {
-        return [
-            'categories' => [
-                'categories_count' => count($categories),
-                'categories' => $categories,
-            ]
-        ];
     }
 
     private static function _addItemsCount($category, &$structure)

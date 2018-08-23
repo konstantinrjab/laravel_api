@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Item;
 use App\Http\Structures\Item as ItemResource;
 use Illuminate\Support\Facades\Input;
-use App\Category;
 
 class ItemController extends Controller
 {
@@ -22,7 +21,7 @@ class ItemController extends Controller
         } else {
             $items = Item::all();
         }
-        return ItemResource::getItemsStructure($items);
+        return ItemResource::getMany($items);
     }
 
     /**
@@ -32,7 +31,7 @@ class ItemController extends Controller
      *      tags={"items"},
      *      summary="Get product",
      *      description="Returns product",
-     *      @SWG\Parameter(
+     *      @SWG\ItemParameter(
      *           name="itemID",
      *           in="path",
      *           description="Item ID",
@@ -60,13 +59,13 @@ class ItemController extends Controller
     public function show($id)
     {
         $item = Item::with('category', 'parameters')->find($id);
-        return ItemResource::getItemStructure($item, true);
+        return ItemResource::getOne($item, true);
     }
 
-    public function store(Request $request)
+    public function store($categoryID, Request $request)
     {
         $values = [
-            'category_id' => category_id,
+            'category_id' => $categoryID,
             'name' => $request->name,
             'sku' => $request->sku,
             'image' => $request->image,
@@ -87,8 +86,8 @@ class ItemController extends Controller
         }
 
         try{
-            $item = Item::create($request->all());
-            return ItemResource::getItemStructure($item);
+            $item = Item::create($values);
+            return ItemResource::getOne($item);
         } catch (QueryException $e){
             return Error::getStructure('Unexpected error');
         }

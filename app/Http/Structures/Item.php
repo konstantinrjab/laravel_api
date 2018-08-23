@@ -2,19 +2,22 @@
 
 namespace App\Http\Structures;
 
-class Item
+class Item extends Structure
 {
-    public static function getItemsStructure($items)
-    {
-        $structure = [];
-        foreach ($items as $item) {
-            $structure['items'][] = self::getItemStructure($item);
-        }
+    const KEY_ONE = 'item';
+    const KEY_MANY = 'items';
 
-        return $structure;
+    public static function getKeyOne()
+    {
+        return self::KEY_ONE;
     }
 
-    public static function getItemStructure($item, $parameters = false)
+    public static function getKeyMany()
+    {
+        return self::KEY_MANY;
+    }
+
+    public static function getOne($item, $parameters = false)
     {
         $structure = [
             'item' => [

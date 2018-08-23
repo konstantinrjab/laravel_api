@@ -46,7 +46,7 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
 
-        return CategoryStructure::getCategoriesStructure($categories);
+        return CategoryStructure::getMany($categories);
     }
 
     public function show($id)
@@ -59,7 +59,7 @@ class CategoryController extends Controller
             $items = null;
         }
 
-        return CategoryStructure::getCategoryStructure($category, $items);
+        return CategoryStructure::getOne($category, $items);
     }
 
     public function store(Request $request)
@@ -79,8 +79,8 @@ class CategoryController extends Controller
         }
 
         try {
-            $category = Category::create($request->all());
-            return CategoryStructure::getCategoryStructure($category);
+            $category = Category::create($values);
+            return CategoryStructure::getOne($category);
         } catch (QueryException $e) {
             return Error::getStructure('Unexpected error');
         }

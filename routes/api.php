@@ -22,12 +22,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('categories/', 'CategoryController@store');
-    Route::post('categories/{category}', 'CategoryController@update');
-    Route::delete('categories/{category}/', 'CategoryController@delete');
+    Route::post('categories/{categoryID}', 'CategoryController@update');
+    Route::delete('categories/{categoryID}/', 'CategoryController@delete');
 
     Route::post('items/', 'ItemController@store');
-    Route::post('items/{id}', 'ItemController@update');
-    Route::delete('items/{id}/', 'ItemController@delete');
+    Route::post('items/{itemID}', 'ItemController@update');
+    Route::delete('items/{itemID}/', 'ItemController@delete');
 
     Route::post('/categories/{categoryID}/parameters/', 'CategoryParametersController@store');
     Route::post('/categories/{categoryID}/parameters/{parameterID}', 'CategoryParametersController@update');

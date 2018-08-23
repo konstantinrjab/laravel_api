@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Structures\Categories as CategoriesResource;
-use App\Http\Structures\Category as CategoryResource;
 use App\ItemParameter;
 use App\Parameter;
 use Illuminate\Http\Request;
-use App\Category;
-use Illuminate\Support\Facades\Input;
+use App\Http\Structures\Error;
+use Illuminate\Database\QueryException;
 
 
 class ItemParametersController extends Controller
@@ -56,9 +54,26 @@ class ItemParametersController extends Controller
     
     public function store(Request $request)
     {
-        $parameter = Parameter::create($request->all());
-        
-        return response()->json($parameter, 201);
+        $values = [
+            'name' => $request->name,
+        ];
+
+        $validator = Validator::make($values, [
+            'name' => 'required|unique:parameters,name',
+        ]);
+
+        if ($validator->fails()) {
+            return Error::getStructure(
+                $validator->errors()
+            );
+        }
+
+        try {
+            $category = Parameter::create($values);
+            return ParameterStructure::getCategoryStructure($category);
+        } catch (QueryException $e) {
+            return Error::getStructure('Unexpected error');
+        }
     }
     
     public function update(Request $request, Parameter $parameter)

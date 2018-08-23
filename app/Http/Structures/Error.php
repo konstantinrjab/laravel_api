@@ -9,7 +9,7 @@ class Error
         $structure = [
             'error' => $message,
         ];
-        if($response){
+        if ($response) {
             $structure['response'] = $response;
         }
 
