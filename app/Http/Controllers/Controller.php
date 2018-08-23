@@ -7,7 +7,9 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\DB;
+use App\Http\Structures\Error;
 use App\Category;
+use Illuminate\Contracts\Validation\Validator;
 
 
 /**
@@ -61,6 +63,9 @@ class Controller extends BaseController
             ->toArray();
         $missingKeys = array_diff($requiredKeys, $requestKeys);
 
+        if ($missingKeys) {
+            $this->trowError('Parameters are invalid or missing: ' . implode(', ', $missingKeys));
+        }
         return (!empty($missingKeys) ? $missingKeys : false);
     }
 
@@ -81,16 +86,22 @@ class Controller extends BaseController
         return false;
     }
 
-    protected function checkInvalidUnique($tableName, $fields)
+    protected function checkBusyUnique($tableName, $fields)
     {
         $query = DB::table($tableName);
         foreach ($fields as $key => $value) {
             $query->where($key, '=', $value);
         }
         $result = $query->count();
-        if($result){
+        if ($result) {
             return 'unique value is busy';
         }
         return false;
+    }
+
+    public function trowError($message)
+    {
+        $response = Error::getStructure($message);
+        return response()->json($response);
     }
 }

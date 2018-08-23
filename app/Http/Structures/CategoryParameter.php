@@ -14,13 +14,23 @@ class CategoryParameter
     public static function getParameterStructure($parameter)
     {
         return [
-            'parameter' => $parameter,
+            'parameter' => [
+                'id' => $parameter->id,
+                'category_id' => $parameter->category_id,
+                'parameter_id' => $parameter->parameter_id,
+                'created_at' => $parameter->created_at->format('Y-m-d H:i:s'),
+                'updated_at' => $parameter->updated_at->format('Y-m-d H:i:s'),
+            ],
         ];
     }
-    public static function getParametersStructure($parameter)
+    public static function getParametersStructure($parameters)
     {
-        return [
-            'parameters' => $parameter,
-        ];
+        $structure = [];
+
+        foreach ($parameters as $parameter){
+            $structure['parameters'][] = self::getParameterStructure($parameter);
+        }
+
+        return $structure;
     }
 }

@@ -33,8 +33,9 @@ class Category
         ];
     }
 
-    private static function _addItemsCount($category, &$structure){
-        if($category->items){
+    private static function _addItemsCount($category, &$structure)
+    {
+        if ($category->items) {
             $count = count($category->items);
         } else {
             $count = 0;

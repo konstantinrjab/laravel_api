@@ -77,11 +77,11 @@ class ItemController extends Controller
                 'Parameters are invalid or missing: '.implode(', ', $validateErrors)
             );
         }
-        $unqueError = $this->checkInvalidUnique(
+        $uniqueError = $this->checkBusyUnique(
             $this::TABLE_NAME_ITEMS,
             ['sku' => $requestParameters['sku']]
         );
-        if ($unqueError){
+        if ($uniqueError){
             return Error::getStructure('Unique parameter is busy');
         }
 

@@ -43,25 +43,23 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        
+
         return CategoryStructure::getCategoriesStructure($categories);
     }
-    
+
     public function show($id)
     {
-        if(Input::get('items')){
+        if (Input::get('items')) {
             $category = Category::with('items')->find($id);
-            $items_count = count($category->items);
             $items = $category->items;
         } else {
             $category = Category::withCount('items')->find($id);
-            $items_count = $category->items_count;
             $items = null;
         }
 
         return CategoryStructure::getCategoryStructure($category, $items);
     }
-    
+
     public function store(Request $request)
     {
         if (!$request->name) {
@@ -73,24 +71,24 @@ class CategoryController extends Controller
             return response()->json($error, 409);
         }
         $category = Category::create($request->all());
-        
+
         return CategoryStructure::getCategoryStructure($category);
     }
-    
+
     public function update(Request $request, Category $category)
     {
         $category->update($request->all());
-        
+
         return response()->json($category, 200);
     }
-    
+
     public function delete(Category $category)
     {
         $category->delete();
-        
+
         return response()->json(null, 204);
     }
-    
+
     public function getWithItems($id)
     {
         return Category::with(['items'])->find($id);

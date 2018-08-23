@@ -22,12 +22,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('categories/', 'CategoryController@store');
-    Route::put('categories/{category}', 'CategoryController@update');
+    Route::post('categories/{category}', 'CategoryController@update');
     Route::delete('categories/{category}/', 'CategoryController@delete');
 
     Route::post('items/', 'ItemController@store');
-    Route::put('items/{id}', 'ItemController@update');
+    Route::post('items/{id}', 'ItemController@update');
     Route::delete('items/{id}/', 'ItemController@delete');
+
+    Route::post('/categories/{categoryID}/parameters/', 'CategoryParametersController@store');
+//    Route::post('/categories/{categoryID}/parameters/{parameterID}', 'CategoryParametersController@update');
+    Route::delete('/categories/parameters/{id}', 'CategoryParametersController@delete');
 });
 
 Route::post('register', 'Auth\RegisterController@register');
@@ -35,8 +39,8 @@ Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout');
 
 Route::group(['middleware' => 'responseApi'], function () {
-    Route::get('/category-parameters/', 'CategoryParametersController@index');
-    Route::get('/category-parameters/{id}', 'CategoryParametersController@show');
+    Route::get('/categories/parameters/', 'CategoryParametersController@index');
+    Route::get('/categories/parameters/{id}', 'CategoryParametersController@show');
 
     Route::get('/categories/', 'CategoryController@index');
     Route::get('/categories/{id}/parameters', 'CategoryParametersController@getByCategory');
