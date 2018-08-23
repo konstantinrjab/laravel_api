@@ -49,13 +49,13 @@ class CategoryController extends Controller
         return CategoryStructure::getMany($categories);
     }
 
-    public function show($id)
+    public function show($categoryID)
     {
         if (Input::get('items')) {
-            $category = Category::with('items')->find($id);
+            $category = Category::with('items')->find($categoryID);
             $items = $category->items;
         } else {
-            $category = Category::withCount('items')->find($id);
+            $category = Category::withCount('items')->find($categoryID);
             $items = null;
         }
 

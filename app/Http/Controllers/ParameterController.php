@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\ItemParameter;
 use App\Parameter;
 use Illuminate\Http\Request;
 use App\Http\Structures\Error;
 use Illuminate\Database\QueryException;
-use App\Http\Structures\ItemParameter as ItemParametersStructure;
+use App\Http\Structures\Parameter as ParameterStructure;
 use Validator;
 
 
-class ItemParametersController extends Controller
+class ParameterController extends Controller
 {
     /**
      * @SWG\Get(
@@ -44,14 +43,14 @@ class ItemParametersController extends Controller
      */
     public function index()
     {
-        $parameters = ItemParameter::all();
-        return ItemParametersStructure::getMany($parameters);
+        $parameters = Parameter::all();
+        return ParameterStructure::getMany($parameters);
     }
     
-    public function show($itemParameterID)
+    public function show($parameterID)
     {
-        $parameter = ItemParameter::find($itemParameterID);
-        return ItemParametersStructure::getOne($parameter);
+        $parameter = Parameter::find($parameterID);
+        return ParameterStructure::getOne($parameter);
     }
     
     public function store(Request $request)
@@ -72,7 +71,7 @@ class ItemParametersController extends Controller
 
         try {
             $parameter = Parameter::create($values);
-            return ItemParametersStructure::getOne($parameter);
+            return ParameterStructure::getOne($parameter);
         } catch (QueryException $e) {
             return Error::getStructure('Unexpected error');
         }

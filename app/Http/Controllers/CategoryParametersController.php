@@ -51,15 +51,15 @@ class CategoryParametersController extends Controller
      * @return array
      * Returns list of objects
      */
-    public function getByCategory($id)
+    public function getByCategory($categoryID)
     {
-        $parameters = CategoryParameter::where(['category_id' => $id])->get();
+        $parameters = CategoryParameter::where(['category_id' => $categoryID])->get();
         return CategoryParameterStructure::getMany($parameters);
     }
 
-    public function show($id)
+    public function show($categoryParameterID)
     {
-        $parameter = CategoryParameter::find($id);
+        $parameter = CategoryParameter::find($categoryParameterID);
         return CategoryParameterStructure::getOne($parameter);
     }
 

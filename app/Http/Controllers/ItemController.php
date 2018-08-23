@@ -7,20 +7,15 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Item;
 use App\Http\Structures\Item as ItemResource;
-use Illuminate\Support\Facades\Input;
+use Validator;
 
 class ItemController extends Controller
 {
     const TABLE_NAME_ITEMS = 'items';
-    const TABLE_NAME_ITEM_PARAMETERS = 'items';
 
     public function index()
     {
-        if (Input::get('parameters')) {
-            $items = Item::with('parameters')->get();
-        } else {
-            $items = Item::all();
-        }
+        $items = Item::all();
         return ItemResource::getMany($items);
     }
 
@@ -56,16 +51,16 @@ class ItemController extends Controller
      *
      * Returns item
      */
-    public function show($id)
+    public function show($itemID)
     {
-        $item = Item::with('category', 'parameters')->find($id);
+        $item = Item::with('category', 'parameters')->find($itemID);
         return ItemResource::getOne($item, true);
     }
 
-    public function store($categoryID, Request $request)
+    public function store(Request $request)
     {
         $values = [
-            'category_id' => $categoryID,
+            'category_id' => $request->category_id,
             'name' => $request->name,
             'sku' => $request->sku,
             'image' => $request->image,
@@ -73,10 +68,10 @@ class ItemController extends Controller
         ];
 
         $validator = Validator::make($values, [
-            'category_id' => ['required', 'exists:categories,id'],
+            'category_id' => 'required|exists:categories,id',
             'name' => 'required',
-            'sku' => ['required', 'unique:items'],
-            'price' => ['integer', 'min:0']
+            'sku' => 'required|unique:items',
+            'price' => 'integer|min:0'
         ]);
 
         if ($validator->fails()) {
@@ -85,10 +80,10 @@ class ItemController extends Controller
             );
         }
 
-        try{
+        try {
             $item = Item::create($values);
             return ItemResource::getOne($item);
-        } catch (QueryException $e){
+        } catch (QueryException $e) {
             return Error::getStructure('Unexpected error');
         }
     }

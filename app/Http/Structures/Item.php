@@ -30,7 +30,7 @@ class Item extends Structure
                 'category' => $item->category,
             ]
         ];
-        if($parameters){
+        if ($parameters) {
             $structure['item']['parameters'] = $item->parameters;
         }
 
