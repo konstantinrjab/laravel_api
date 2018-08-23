@@ -72,30 +72,24 @@ class CategoryParametersController extends Controller
 
     public function store($categoryID, Request $request)
     {
-//        $handler = new AddCategoryParameterRequest();
-//        $handler->add($categoryID, $request);
+        $values = [
+            'category_id' => $categoryID,
+            'parameter_id' => $request->parameter_id
+        ];
 
-        $values = Input::all();
-        $validator = Validator::make($request->all(), [
-            'category_id' => 'required',
-            'parameter_id' => 'required',
+        $validator = Validator::make($values, [
+            'category_id' => ['required', 'exists:categories,id'],
+            'parameter_id' => ['required', 'exists:parameters,id'],
         ]);
 
         if ($validator->fails()) {
             return Error::getStructure(
-                'Parameters are invalid or missing: ' . $validator->errors()
+                 $validator->errors()
             );
         }
-//        $validateErrors = $this->validateParameters(
-//            $this::TABLE_NAME,
-//            $values,
-//            ['category_id' => 'categories']
-//        );
-//
-//        $parameter = CategoryParameter::create($values);
-//        return CategoryParameterStructure::getParameterStructure($parameter);
 
-        return response()->json('ololo', 201);
+        $parameter = CategoryParameter::create($values);
+        return CategoryParameterStructure::getParameterStructure($parameter);
     }
 
     public function update(Request $request, Parameter $parameter)
