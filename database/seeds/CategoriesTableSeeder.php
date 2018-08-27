@@ -19,5 +19,8 @@ class CategoriesTableSeeder extends Seeder
                 'name' => 'category_'.$i,
             ]);
         }
+        Category::create([
+            'name' => 'Uncategorized',
+        ]);
     }
 }
