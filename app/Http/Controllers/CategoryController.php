@@ -18,6 +18,18 @@ class CategoryController extends Controller
 {
     const NAME_UNCATEGORIZED = 'Uncategorized';
 
+    private function _getRequestValues($request){
+        return [
+            'name' => $request->name,
+        ];
+    }
+
+    private function _getValidator($values){
+        return Validator::make($values, [
+            'name' => 'required|unique:categories,name',
+        ]);
+    }
+
     /**
      * @SWG\Get(
      *      path="/categories",
@@ -69,13 +81,8 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $values = [
-            'name' => $request->name,
-        ];
-
-        $validator = Validator::make($values, [
-            'name' => 'required|unique:categories,name',
-        ]);
+        $values = $this->_getRequestValues($request);
+        $validator = $this->_getValidator($values);
 
         if ($validator->fails()) {
             return Error::getStructure(
@@ -91,11 +98,20 @@ class CategoryController extends Controller
         }
     }
 
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $categoryID)
     {
-        $category->update($request->all());
+        $values = $this->_getRequestValues($request);
+        $validator = $this->_getValidator($values);
 
-        return response()->json($category, 200);
+        if ($validator->fails()) {
+            return Error::getStructure(
+                $validator->errors()
+            );
+        }
+        $category = Category::find($categoryID);
+        $category->update($values);
+
+        return response()->json(CategoryStructure::getOne($category), 200);
     }
 
     //add desc: when deleted, items moved to Uncategorized

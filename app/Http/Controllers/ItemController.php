@@ -6,17 +6,38 @@ use App\Http\Structures\Error;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Item;
-use App\Http\Structures\Item as ItemResource;
+use App\Http\Structures\Item as ItemStructure;
 use Validator;
 
 class ItemController extends Controller
 {
     const TABLE_NAME_ITEMS = 'items';
 
+    private function _getRequestValues($request)
+    {
+        return [
+            'category_id' => $request->category_id,
+            'name' => $request->name,
+            'sku' => $request->sku,
+            'image' => $request->image,
+            'price' => $request->price,
+        ];
+    }
+
+    private function _getValidator($values)
+    {
+        return Validator::make($values, [
+            'category_id' => 'required|exists:categories,id',
+            'name' => 'required',
+            'sku' => 'required|unique:items',
+            'price' => 'integer|min:0'
+        ]);
+    }
+
     public function index()
     {
         $items = Item::all();
-        return ItemResource::getMany($items);
+        return ItemStructure::getMany($items);
     }
 
     /**
@@ -54,25 +75,13 @@ class ItemController extends Controller
     public function show($itemID)
     {
         $item = Item::with('category', 'parameters')->find($itemID);
-        return ItemResource::getOne($item, true);
+        return ItemStructure::getOne($item, true);
     }
 
     public function store(Request $request)
     {
-        $values = [
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-            'sku' => $request->sku,
-            'image' => $request->image,
-            'price' => $request->price,
-        ];
-
-        $validator = Validator::make($values, [
-            'category_id' => 'required|exists:categories,id',
-            'name' => 'required',
-            'sku' => 'required|unique:items',
-            'price' => 'integer|min:0'
-        ]);
+        $values = $this->_getRequestValues($request);
+        $validator = $this->_getValidator($values);
 
         if ($validator->fails()) {
             return Error::getStructure(
@@ -82,17 +91,26 @@ class ItemController extends Controller
 
         try {
             $item = Item::create($values);
-            return ItemResource::getOne($item);
+            return ItemStructure::getOne($item);
         } catch (QueryException $e) {
             return Error::getStructure('Unexpected error');
         }
     }
 
-    public function update(Request $request, Item $item)
+    public function update(Request $request, $itemID)
     {
-        $item->update($request->all());
+        $values = $this->_getRequestValues($request);
+        $validator = $this->_getValidator($values);
 
-        return response()->json($item, 200);
+        if ($validator->fails()) {
+            return Error::getStructure(
+                $validator->errors()
+            );
+        }
+        $item = Item::find($itemID);
+        $item->update($values);
+
+        return response()->json(ItemStructure::getOne($item), 200);
     }
 
     public function delete($itemID)
