@@ -19,14 +19,15 @@ class CreateItemParameterTable extends Migration
             $table->unsignedInteger('parameter_id');
             $table->string('value');
             $table->timestamps();
-    
+
             $table->foreign('item_id')
                 ->references('id')
                 ->on('items');
-            
+
             $table->foreign('parameter_id')
                 ->references('id')
-                ->on('parameters');
+                ->on('parameters')
+                ->onDelete('cascade');
         });
     }
 

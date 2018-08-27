@@ -47,13 +47,13 @@ class ItemParametersController extends Controller
         $parameters = ItemParameter::all();
         return ItemParametersStructure::getMany($parameters);
     }
-    
+
     public function show($itemParameterID)
     {
         $parameter = ItemParameter::find($itemParameterID);
         return ItemParametersStructure::getOne($parameter);
     }
-    
+
     public function store(Request $request)
     {
         $values = [
@@ -77,22 +77,23 @@ class ItemParametersController extends Controller
             return Error::getStructure('Unexpected error');
         }
     }
-    
+
     public function update(Request $request, Parameter $parameter)
     {
         $parameter->update($request->all());
-        
+
         return response()->json($parameter, 200);
     }
-    
-    public function delete($itemID, Parameter $parameter)
+
+    public function delete($itemID, $parameterID)
     {
         try {
-            dd(12);
+            $parameter = ItemParameter::where('item_id', $itemID)
+                ->where('parameter_id', $parameterID)
+                ->firstOrFail();
             $parameter->delete();
             return response()->json('success', 204);
         } catch (QueryException $e) {
-            dd(33);
             return Error::getStructure('Unexpected error');
         }
     }

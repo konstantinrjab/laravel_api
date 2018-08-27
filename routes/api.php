@@ -48,8 +48,8 @@ Route::group(['middleware' => 'auth:api'], function () {
         ->where('itemID', '[0-9]+');
     Route::post('items/{itemID}/parameters/{parameterID}', 'ItemParametersController@update')
         ->where('itemID', '[0-9]+');
-    Route::delete('items/{itemID}/parameters/{parameter}', 'ItemParametersController@delete')
-        ->where('itemID', '[0-9]+');
+    Route::delete('items/{itemID}/parameters/{parameterID}', 'ItemParametersController@delete')
+        ->where(['itemID' => '[0-9]+', 'parameterID' => '[0-9]+']);
 });
 
 Route::post('register', 'Auth\RegisterController@register');
@@ -73,8 +73,8 @@ Route::group(['middleware' => 'responseApi'], function () {
         ->where('itemID', '[0-9]+');
 
     Route::get('items/parameters', 'ItemParametersController@index');
-    Route::get('items/{itemID}/parameters', 'ItemParametersController@getByItem')
-        ->where('itemID', '[0-9]+');
+//    Route::get('items/{itemID}/parameters', 'ItemParametersController@getByItem')
+//        ->where('itemID', '[0-9]+');
 
     Route::get('/parameters', 'ParameterController@index');
     Route::get('/parameters/{parameterID}', 'ParameterController@show')
