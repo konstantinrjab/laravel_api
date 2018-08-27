@@ -13,14 +13,21 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        User::truncate();
-        $faker = \Faker\Factory::create();
         $password = Hash::make('toptal');
+
+        try {
+            User::truncate();
+        } catch (Exception $e) {
+            $this->_addAmin($password);
+            return;
+        }
+        $faker = \Faker\Factory::create();
 
         User::create([
             'name' => 'Administrator',
             'email' => 'admin@test.com',
             'password' => $password,
+            'api_token' => 'Buhq0cKoBoxWbOecK3oynYK536lXc6Kmi3hR90G5kD6rFB7FgBAkFYA1C8ZN'
         ]);
 
         for ($i = 0; $i < 10; $i++) {
@@ -30,5 +37,15 @@ class UsersTableSeeder extends Seeder
                 'password' => $password,
             ]);
         }
+    }
+
+    private function _addAmin($password)
+    {
+        User::create([
+            'name' => 'Administrator',
+            'email' => 'admin@test.com',
+            'password' => $password,
+            'api_token' => 'Buhq0cKoBoxWbOecK3oynYK536lXc6Kmi3hR90G5kD6rFB7FgBAkFYA1C8ZN'
+        ]);
     }
 }

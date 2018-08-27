@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CategoryParameter;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use App\Http\Structures\CategoryParameter as CategoryParameterStructure;
 use App\Http\Structures\Error;
@@ -11,7 +12,26 @@ use Validator;
 
 class CategoryParametersController extends Controller
 {
-    const TABLE_NAME = 'category_parameter';
+    private function _getRequestValues($request)
+    {
+        return [
+            'category_id' => $request->category_id,
+            'name' => $request->name,
+            'sku' => $request->sku,
+            'image' => $request->image,
+            'price' => $request->price,
+        ];
+    }
+
+    private function _getValidator($values)
+    {
+        return Validator::make($values, [
+            'category_id' => 'required|exists:categories,id',
+            'name' => 'required',
+            'sku' => 'required|unique:items',
+            'price' => 'integer|min:0'
+        ]);
+    }
 
     public function index()
     {
@@ -60,6 +80,9 @@ class CategoryParametersController extends Controller
     public function show($categoryParameterID)
     {
         $parameter = CategoryParameter::find($categoryParameterID);
+        if(is_null($parameter)){
+            throw new ModelNotFoundException();
+        }
         return CategoryParameterStructure::getOne($parameter);
     }
 

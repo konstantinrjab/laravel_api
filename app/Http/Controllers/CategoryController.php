@@ -18,13 +18,15 @@ class CategoryController extends Controller
 {
     const NAME_UNCATEGORIZED = 'Uncategorized';
 
-    private function _getRequestValues($request){
+    private function _getRequestValues($request)
+    {
         return [
             'name' => $request->name,
         ];
     }
 
-    private function _getValidator($values){
+    private function _getValidator($values)
+    {
         return Validator::make($values, [
             'name' => 'required|unique:categories,name',
         ]);
@@ -74,6 +76,9 @@ class CategoryController extends Controller
         } else {
             $category = Category::withCount('items')->find($categoryID);
             $items = null;
+        }
+        if (is_null($category)) {
+            throw new ModelNotFoundException();
         }
 
         return CategoryStructure::getOne($category, $items);

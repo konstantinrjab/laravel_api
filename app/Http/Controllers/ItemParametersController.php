@@ -48,12 +48,6 @@ class ItemParametersController extends Controller
         return ItemParametersStructure::getMany($parameters);
     }
 
-    public function show($itemParameterID)
-    {
-        $parameter = ItemParameter::find($itemParameterID);
-        return ItemParametersStructure::getOne($parameter);
-    }
-
     public function store(Request $request)
     {
         $values = [

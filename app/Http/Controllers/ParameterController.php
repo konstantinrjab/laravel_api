@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Parameter;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Structures\Error;
 use Illuminate\Database\QueryException;
@@ -50,6 +51,9 @@ class ParameterController extends Controller
     public function show($parameterID)
     {
         $parameter = Parameter::find($parameterID);
+        if(is_null($parameter)){
+            throw new ModelNotFoundException();
+        }
         return ParameterStructure::getOne($parameter);
     }
 

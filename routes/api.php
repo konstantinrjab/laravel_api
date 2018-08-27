@@ -73,8 +73,6 @@ Route::group(['middleware' => 'responseApi'], function () {
         ->where('itemID', '[0-9]+');
 
     Route::get('items/parameters', 'ItemParametersController@index');
-//    Route::get('items/{itemID}/parameters', 'ItemParametersController@getByItem')
-//        ->where('itemID', '[0-9]+');
 
     Route::get('/parameters', 'ParameterController@index');
     Route::get('/parameters/{parameterID}', 'ParameterController@show')

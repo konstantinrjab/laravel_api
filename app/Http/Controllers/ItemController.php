@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Structures\Error;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Item;
@@ -11,8 +12,6 @@ use Validator;
 
 class ItemController extends Controller
 {
-    const TABLE_NAME_ITEMS = 'items';
-
     private function _getRequestValues($request)
     {
         return [
@@ -75,6 +74,9 @@ class ItemController extends Controller
     public function show($itemID)
     {
         $item = Item::with('category', 'parameters')->find($itemID);
+        if(is_null($item)){
+            throw new ModelNotFoundException();
+        }
         return ItemStructure::getOne($item, true);
     }
 
