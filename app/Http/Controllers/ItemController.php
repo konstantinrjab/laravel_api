@@ -95,10 +95,8 @@ class ItemController extends Controller
         return response()->json($item, 200);
     }
 
-    public function delete(Item $item)
+    public function delete($itemID)
     {
-        $item->delete();
-
-        return response()->json(null, 204);
+        return $this->deleteIdentByID($itemID, '\App\Item');
     }
 }

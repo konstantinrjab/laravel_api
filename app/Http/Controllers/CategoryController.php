@@ -4,15 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Structures\Category as CategoryStructure;
 use App\Http\Structures\Error;
+use App\Item;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Category;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Database\QueryException;
 use Validator;
+use Illuminate\Support\Facades\DB;
 
 
 class CategoryController extends Controller
 {
+    const NAME_UNCATEGORIZED = 'Uncategorized';
+
     /**
      * @SWG\Get(
      *      path="/categories",
@@ -93,11 +98,33 @@ class CategoryController extends Controller
         return response()->json($category, 200);
     }
 
-    public function delete(Category $category)
+    //add desc: when deleted, items moved to Uncategorized
+    public function delete($categoryID)
     {
-        $category->delete();
+        $uncategorized = Category::where('name', $this::NAME_UNCATEGORIZED)->first();
+        if (is_null($uncategorized)) {
+            return response()->json(
+                'Category for uncategorized items: "' . $this::NAME_UNCATEGORIZED . '" not found',
+                404
+            );
+        }
+        if ($categoryID == $uncategorized->id) {
+            return response()->json(
+                Error::getStructure('Cant delete default uncategorized category: ' . $this::NAME_UNCATEGORIZED),
+                400
+            );
+        }
+        DB::beginTransaction();
+        try {
+            Item::where('category_id', $categoryID)->update(['category_id' => $uncategorized->id]);
+            $result = $this->deleteIdentByID($categoryID, '\App\Category');
+            DB::commit();
+            return $result;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Error::getStructure('Unexpected error');
+        }
 
-        return response()->json(null, 204);
     }
 
     public function getWithItems($id)
