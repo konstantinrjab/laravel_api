@@ -46,13 +46,13 @@ class ParameterController extends Controller
         $parameters = Parameter::all();
         return ParameterStructure::getMany($parameters);
     }
-    
+
     public function show($parameterID)
     {
         $parameter = Parameter::find($parameterID);
         return ParameterStructure::getOne($parameter);
     }
-    
+
     public function store(Request $request)
     {
         $values = [
@@ -76,22 +76,16 @@ class ParameterController extends Controller
             return Error::getStructure('Unexpected error');
         }
     }
-    
+
     public function update(Request $request, Parameter $parameter)
     {
         $parameter->update($request->all());
-        
+
         return response()->json($parameter, 200);
     }
-    
+
     public function delete($parameterID)
     {
-        try {
-            $parameter = Parameter::find($parameterID);
-            $parameter->delete();
-            return response()->json('success', 200);
-        } catch (QueryException $e) {
-            return Error::getStructure($e);
-        }
+        return $this->deleteIdentByID($parameterID, '\App\Item');
     }
 }

@@ -71,7 +71,7 @@ class ItemParametersController extends Controller
         }
 
         try {
-            $parameter = Parameter::create($values);
+            $parameter = ItemParameter::create($values);
             return ItemParametersStructure::getOne($parameter);
         } catch (QueryException $e) {
             return Error::getStructure('Unexpected error');
@@ -87,14 +87,10 @@ class ItemParametersController extends Controller
 
     public function delete($itemID, $parameterID)
     {
-        try {
-            $parameter = ItemParameter::where('item_id', $itemID)
-                ->where('parameter_id', $parameterID)
-                ->firstOrFail();
-            $parameter->delete();
-            return response()->json('success', 200);
-        } catch (QueryException $e) {
-            return Error::getStructure('Unexpected error');
-        }
+        $parameter = ItemParameter::where('item_id', $itemID)
+            ->where('parameter_id', $parameterID)
+            ->first();
+
+        return $this->deleteIdent($parameter);
     }
 }

@@ -82,7 +82,7 @@ class CategoryParametersController extends Controller
         }
         try {
             $parameter = CategoryParameter::create($values);
-            return CategoryParameterStructure::getParameterStructure($parameter);
+            return CategoryParameterStructure::getOne($parameter);
         } catch (QueryException $e) {
             return Error::getStructure('Unexpected error');
         }
@@ -95,10 +95,8 @@ class CategoryParametersController extends Controller
         return response()->json($parameter, 200);
     }
 
-    public function delete(Parameter $parameter)
+    public function delete($parameterID)
     {
-        $parameter->delete();
-
-        return response()->json(null, 204);
+        return $this->deleteIdentByID($parameterID, '\App\CategoryParameter');
     }
 }
