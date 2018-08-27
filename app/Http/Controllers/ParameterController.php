@@ -86,6 +86,6 @@ class ParameterController extends Controller
 
     public function delete($parameterID)
     {
-        return $this->deleteIdentByID($parameterID, '\App\Item');
+        return $this->deleteIdentByID($parameterID, '\App\Parameter');
     }
 }

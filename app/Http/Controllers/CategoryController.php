@@ -108,6 +108,12 @@ class CategoryController extends Controller
                 404
             );
         }
+        if ($categoryID == $uncategorized->id) {
+            return response()->json(
+                Error::getStructure('Cant delete default uncategorized category: ' . $this::NAME_UNCATEGORIZED),
+                400
+            );
+        }
         DB::beginTransaction();
         try {
             Item::where('category_id', $categoryID)->update(['category_id' => $uncategorized->id]);
