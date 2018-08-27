@@ -84,10 +84,14 @@ class ParameterController extends Controller
         return response()->json($parameter, 200);
     }
     
-    public function delete(Parameter $parameter)
+    public function delete($parameterID)
     {
-        $parameter->delete();
-        
-        return response()->json(null, 204);
+        try {
+            $parameter = Parameter::find($parameterID);
+            $parameter->delete();
+            return response()->json('success', 200);
+        } catch (QueryException $e) {
+            return Error::getStructure($e);
+        }
     }
 }

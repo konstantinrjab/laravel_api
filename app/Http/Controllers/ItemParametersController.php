@@ -92,7 +92,7 @@ class ItemParametersController extends Controller
                 ->where('parameter_id', $parameterID)
                 ->firstOrFail();
             $parameter->delete();
-            return response()->json('success', 204);
+            return response()->json('success', 200);
         } catch (QueryException $e) {
             return Error::getStructure('Unexpected error');
         }

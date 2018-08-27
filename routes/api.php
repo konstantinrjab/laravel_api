@@ -42,7 +42,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('/parameters', 'ParameterController@store');
     Route::post('/parameters/{parameterID}', 'ParameterController@update');
-    Route::delete('/parameters/{parameter}', 'ParameterController@delete');
+    Route::delete('/parameters/{parameterID}', 'ParameterController@delete');
 
     Route::post('items/{itemID}/parameters', 'ItemParametersController@store')
         ->where('itemID', '[0-9]+');
