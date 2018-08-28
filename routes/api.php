@@ -35,8 +35,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('/categories/{categoryID}/parameters/', 'CategoryParametersController@store')
         ->where('categoryID', '[0-9]+');
-    Route::post('/categories/{categoryID}/parameters/{parameterID}', 'CategoryParametersController@update')
-        ->where('categoryID', '[0-9]+');
+    Route::post('/categories/parameters/{parameterID}', 'CategoryParametersController@update')
+        ->where('parameterID', '[0-9]+');
     Route::delete('/categories/parameters/{parameterID}', 'CategoryParametersController@delete')
         ->where('categoryID', '[0-9]+');
 

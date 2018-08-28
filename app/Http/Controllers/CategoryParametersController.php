@@ -12,20 +12,20 @@ use Validator;
 
 class CategoryParametersController extends Controller
 {
-    private function _getRequestValues($categoryID, $request)
+    private function _getRequestValues($request)
     {
         return [
-            'category_id' => $categoryID,
+            'category_id' => $request->category_id,
             'parameter_id' => $request->parameter_id
         ];
     }
 
-    private function _getValidator($values)
+    protected function getRules()
     {
-        return Validator::make($values, [
-            'category_id' => ['required', 'exists:categories,id'],
-            'parameter_id' => ['required', 'exists:parameters,id'],
-        ]);
+        return [
+            'category_id' => 'required|exists:categories,id',
+            'parameter_id' => 'required|exists:parameters,id',
+        ];
     }
 
     public function index()
@@ -83,8 +83,10 @@ class CategoryParametersController extends Controller
 
     public function store($categoryID, Request $request)
     {
-        $values = $this->_getRequestValues($categoryID, $request);
-        $validator = $this->_getValidator($values);
+        $values = $this->_getRequestValues($request);
+        $values['category_id'] = $categoryID;
+        $rules = $this->getRules();
+        $validator = Validator::make($values, $rules);
 
         if ($validator->fails()) {
             return Error::getStructure(
@@ -99,11 +101,22 @@ class CategoryParametersController extends Controller
         }
     }
 
-    public function update(Request $request, Parameter $parameter)
+    public function update(Request $request, $parameterID)
     {
-        $parameter->update($request->all());
+        $values = $this->_getRequestValues($request);
+        $rules = $this->getUpdateRules();
 
-        return response()->json($parameter, 200);
+        $validator = Validator::make($values, $rules);
+
+        if ($validator->fails()) {
+            return Error::getStructure(
+                $validator->errors()
+            );
+        }
+        $parameter = CategoryParameter::find($parameterID);
+        $parameter->update($values);
+
+        return response()->json(CategoryParameterStructure::getOne($parameter), 200);
     }
 
     public function delete($parameterID)

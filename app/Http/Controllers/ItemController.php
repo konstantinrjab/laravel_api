@@ -23,10 +23,10 @@ class ItemController extends Controller
 
     public function __construct()
     {
-        $this->itemParameters = array_keys($this->_getItemRules());
+        $this->itemParameters = array_keys($this->getRules());
     }
 
-    private function _getItemRules()
+    protected function getRules()
     {
         return [
             'category_id' => 'required|exists:categories,id',
@@ -69,7 +69,7 @@ class ItemController extends Controller
 
     private function _getValidationRules($request)
     {
-        $rules = $this->_getItemRules();
+        $rules = $this->getRules();
         $categoryRules = $this->_getCategoryParametersRulesByCategoryID($request->category_id);
         if (is_array($categoryRules)) {
             $rules = array_merge($categoryRules, $rules);
@@ -191,10 +191,7 @@ class ItemController extends Controller
 
     public function update(Request $request, $itemID)
     {
-        $rules = $this->_getItemRules();
-        foreach ($rules as &$rule){
-            $rule = 'sometimes|'.$rule;
-        }
+        $rules = $this->getUpdateRules();
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {

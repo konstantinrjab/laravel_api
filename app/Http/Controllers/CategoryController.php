@@ -25,11 +25,11 @@ class CategoryController extends Controller
         ];
     }
 
-    private function _getValidator($values)
+    protected function getRules()
     {
-        return Validator::make($values, [
+        return [
             'name' => 'required|unique:categories,name',
-        ]);
+        ];
     }
 
     /**
@@ -87,7 +87,8 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $values = $this->_getRequestValues($request);
-        $validator = $this->_getValidator($values);
+        $rules = $this->getRules();
+        $validator = Validator::make($values, $rules);
 
         if ($validator->fails()) {
             return Error::getStructure(
@@ -106,7 +107,9 @@ class CategoryController extends Controller
     public function update(Request $request, $categoryID)
     {
         $values = $this->_getRequestValues($request);
-        $validator = $this->_getValidator($values);
+        $rules = $this->getUpdateRules();
+
+        $validator = Validator::make($values, $rules);
 
         if ($validator->fails()) {
             return Error::getStructure(
