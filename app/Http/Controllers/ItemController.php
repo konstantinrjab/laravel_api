@@ -29,16 +29,33 @@ class ItemController extends Controller
         ];
     }
 
-    private function _getCategoryParametersRules($itemID)
+    private function _getCategoryParametersRulesByCategoryID($categoryID)
     {
-        $item = Item::find($itemID);
-        $parametersID = CategoryParameter::where('category_id', $item->category_id)->get(['id']);
+        $parametersID = CategoryParameter::where('category_id', $categoryID)->get(['parameter_id']);
         $parameters = Parameter::whereIn('id', $parametersID)->get(['name']);
         $rules = false;
         foreach ($parameters as $parameter) {
             $rules[$parameter->name] = 'required';
         }
         return $rules;
+    }
+
+    private function _prepareItemParameters($values, $itemID){
+        $itemParametersNames = array_keys($this->_getItemParametersRules());
+        $categoryParametersNames = array_diff(array_keys($values), $itemParametersNames);
+        $categoryParameters = Parameter::whereIn('name', $categoryParametersNames)->get(['id', 'name']);
+        $data = false;
+        foreach ($categoryParameters as $categoryParameter) {
+            $value = $values[$categoryParameter->name];
+            $data[] = [
+                'item_id' => $itemID,
+                'parameter_id' => $categoryParameter->id,
+                'value' => $value,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+        }
+        return $data;
     }
 
     public function index()
@@ -92,7 +109,7 @@ class ItemController extends Controller
     {
         $values = $request->all();
         $rules = $this->_getItemParametersRules();
-        $categoryParametersRules = $this->_getCategoryParametersRules($request->category_id);
+        $categoryParametersRules = $this->_getCategoryParametersRulesByCategoryID($request->category_id);
         if (is_array($categoryParametersRules)) {
             $rules = array_merge($categoryParametersRules, $rules);
         }
@@ -105,22 +122,9 @@ class ItemController extends Controller
         }
         DB::beginTransaction();
         try {
-            $itemParametersNames = array_keys($this->_getItemParametersRules());
-            $categoryParametersNames = array_diff(array_keys($values), $itemParametersNames);
-            $categoryParameters = Parameter::whereIn('name', $categoryParametersNames)->get(['id', 'name']);
             $item = Item::create($values);
-            $data = false;
-            foreach ($categoryParameters as $categoryParameter) {
-                $value = $values[$categoryParameter->name];
-                $data[] = [
-                    'item_id' => $item->id,
-                    'parameter_id' => $categoryParameter->id,
-                    'value' => $value,
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s')
-                ];
-            }
-            ItemParameter::insert($data);
+            $itemParameters = $this->_prepareItemParameters($values, $item->id);
+            ItemParameter::insert($itemParameters);
             DB::commit();
             return ItemStructure::getOne($item, true);
         } catch (\Exception $e) {
