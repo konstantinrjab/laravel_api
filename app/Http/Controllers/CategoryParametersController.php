@@ -12,24 +12,19 @@ use Validator;
 
 class CategoryParametersController extends Controller
 {
-    private function _getRequestValues($request)
+    private function _getRequestValues($categoryID, $request)
     {
         return [
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-            'sku' => $request->sku,
-            'image' => $request->image,
-            'price' => $request->price,
+            'category_id' => $categoryID,
+            'parameter_id' => $request->parameter_id
         ];
     }
 
     private function _getValidator($values)
     {
         return Validator::make($values, [
-            'category_id' => 'required|exists:categories,id',
-            'name' => 'required',
-            'sku' => 'required|unique:items',
-            'price' => 'integer|min:0'
+            'category_id' => ['required', 'exists:categories,id'],
+            'parameter_id' => ['required', 'exists:parameters,id'],
         ]);
     }
 
@@ -80,7 +75,7 @@ class CategoryParametersController extends Controller
     public function show($categoryParameterID)
     {
         $parameter = CategoryParameter::find($categoryParameterID);
-        if(is_null($parameter)){
+        if (is_null($parameter)) {
             throw new ModelNotFoundException();
         }
         return CategoryParameterStructure::getOne($parameter);
@@ -88,15 +83,8 @@ class CategoryParametersController extends Controller
 
     public function store($categoryID, Request $request)
     {
-        $values = [
-            'category_id' => $categoryID,
-            'parameter_id' => $request->parameter_id
-        ];
-
-        $validator = Validator::make($values, [
-            'category_id' => ['required', 'exists:categories,id'],
-            'parameter_id' => ['required', 'exists:parameters,id'],
-        ]);
+        $values = $this->_getRequestValues($categoryID, $request);
+        $validator = $this->_getValidator($values);
 
         if ($validator->fails()) {
             return Error::getStructure(
