@@ -191,10 +191,21 @@ class ItemController extends Controller
 
     public function update(Request $request, $itemID)
     {
+        $rules = $this->_getItemRules();
+        foreach ($rules as &$rule){
+            $rule = 'sometimes|'.$rule;
+        }
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return Error::getStructure(
+                $validator->errors()
+            );
+        }
         $item = Item::find($itemID);
         $item->update($request->all());
 
-        return response()->json(ItemStructure::getOne($item), 200);
+        return response()->json(ItemStructure::getOne($item, true), 200);
     }
 
     public function delete($itemID)
