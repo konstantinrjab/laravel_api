@@ -18,7 +18,15 @@ use App\ItemParameter;
 
 class ItemController extends Controller
 {
-    private function _getItemParametersRules()
+    private $categoryParameters;
+    private $itemParameters;
+
+    public function __construct()
+    {
+        $this->itemParameters = array_keys($this->_getItemRules());
+    }
+
+    private function _getItemRules()
     {
         return [
             'category_id' => 'required|exists:categories,id',
@@ -37,13 +45,14 @@ class ItemController extends Controller
         foreach ($parameters as $parameter) {
             $rules[$parameter->name] = 'required';
         }
+        $this->categoryParameters = (is_array($rules) ? array_keys($rules) : []);
         return $rules;
     }
 
-    private function _prepareItemParameters($values, $itemID){
-        $itemParametersNames = array_keys($this->_getItemParametersRules());
-        $categoryParametersNames = array_diff(array_keys($values), $itemParametersNames);
-        $categoryParameters = Parameter::whereIn('name', $categoryParametersNames)->get(['id', 'name']);
+    private function _prepareCategoryParametersByItemID($values, $itemID)
+    {
+        $parameters = array_diff(array_keys($values), $this->itemParameters);
+        $categoryParameters = Parameter::whereIn('name', $parameters)->get(['id', 'name']);
         $data = false;
         foreach ($categoryParameters as $categoryParameter) {
             $value = $values[$categoryParameter->name];
@@ -51,6 +60,53 @@ class ItemController extends Controller
                 'item_id' => $itemID,
                 'parameter_id' => $categoryParameter->id,
                 'value' => $value,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+        }
+        return $data;
+    }
+
+    private function _getValidationRules($request)
+    {
+        $rules = $this->_getItemRules();
+        $categoryRules = $this->_getCategoryParametersRulesByCategoryID($request->category_id);
+        if (is_array($categoryRules)) {
+            $rules = array_merge($categoryRules, $rules);
+        }
+
+        $itemParameters = array_diff_key(
+            $request->all(),
+            $rules
+        );
+        $itemParametersRules = [];
+        foreach ($itemParameters as $name => $value) {
+            $itemParametersRules = array_merge(
+                $itemParametersRules,
+                [
+                    $name => 'required'
+                ]);
+        }
+        if (is_array($itemParametersRules)) {
+            $rules = array_merge($itemParametersRules, $rules);
+        }
+
+        return $rules;
+    }
+
+    private function _prepareAdditionalParameters($request, $itemID)
+    {
+        $additionalParameters = array_diff_key(
+            $request,
+            array_flip($this->itemParameters),
+            array_flip($this->categoryParameters)
+        );
+        $additionalParameters = Parameter::whereIn('name', array_keys($additionalParameters))->get(['id', 'name']);
+        foreach ($additionalParameters as $parameter) {
+            $data[] = [
+                'item_id' => $itemID,
+                'parameter_id' => $parameter->id,
+                'value' => $request[$parameter->name],
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ];
@@ -107,47 +163,36 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-        $values = $request->all();
-        $rules = $this->_getItemParametersRules();
-        $categoryParametersRules = $this->_getCategoryParametersRulesByCategoryID($request->category_id);
-        if (is_array($categoryParametersRules)) {
-            $rules = array_merge($categoryParametersRules, $rules);
-        }
-        $validator = Validator::make($values, $rules);
+        $rules = $this->_getValidationRules($request);
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return Error::getStructure(
                 $validator->errors()
             );
         }
+
         DB::beginTransaction();
         try {
-            $item = Item::create($values);
-            $itemParameters = $this->_prepareItemParameters($values, $item->id);
-            ItemParameter::insert($itemParameters);
+            $item = Item::create($request->all());
+            $categoryParameters = $this->_prepareCategoryParametersByItemID($request->all(), $item->id);
+            ItemParameter::insert($categoryParameters);
+
+            $additionalParameters = $this->_prepareAdditionalParameters($request->all(), $item->id);
+            ItemParameter::insert($additionalParameters);
+
             DB::commit();
             return ItemStructure::getOne($item, true);
         } catch (\Exception $e) {
             DB::rollback();
-            return Error::getStructure('Unexpected error');
+            return Error::getStructure('invalid input / parameters does not exist');
         }
     }
 
     public function update(Request $request, $itemID)
     {
-        $values = $this->_getRequestValues($request);
-
-
-        dd($requiredNames);
-        $validator = $this->_getValidator($values, $requiredNames);
-
-        if ($validator->fails()) {
-            return Error::getStructure(
-                $validator->errors()
-            );
-        }
         $item = Item::find($itemID);
-        $item->update($values);
+        $item->update($request->all());
 
         return response()->json(ItemStructure::getOne($item), 200);
     }
