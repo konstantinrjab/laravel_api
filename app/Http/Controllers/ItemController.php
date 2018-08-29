@@ -151,10 +151,11 @@ class ItemController extends Controller
      */
     public function show($itemID)
     {
-        $item = Item::with('category')->find($itemID);
+        $item = Item::with('category', 'images')->find($itemID);
         if (is_null($item)) {
             throw new ModelNotFoundException();
         }
+//        dd($item->images);
         return ItemStructure::getOne($item, true);
     }
 

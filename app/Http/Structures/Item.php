@@ -28,11 +28,12 @@ class Item extends Structure
                 'updated_at' => $item->updated_at->format('Y-m-d H:i:s'),
                 'category' => $item->category,
                 'price' => $item->price,
+                'images' => $item->images
             ]
         ];
         if ($parameters) {
             $itemParameters = \App\ItemParameter::where('item_id', $item->id)->get();
-            $structure['item'] = ItemParameter::getMany($itemParameters);
+            $structure['item'] = array_merge($structure['item'], ItemParameter::getMany($itemParameters));
         }
         return $structure;
     }
