@@ -30,7 +30,9 @@ class ItemParameter extends Structure
         return [
             $key => [
                 'id' => $parameter->id,
-                'name' => $parameter->name,
+                'item_id' => $parameter->item_id,
+                'parameter_id' => $parameter->parameter_id,
+                'value' => $parameter->value,
                 'created_at' => $parameter->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $parameter->updated_at->format('Y-m-d H:i:s'),
             ],

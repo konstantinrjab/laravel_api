@@ -154,7 +154,7 @@ class ItemController extends Controller
      */
     public function show($itemID)
     {
-        $item = Item::with('category', 'parameters')->find($itemID);
+        $item = Item::with('category')->find($itemID);
         if (is_null($item)) {
             throw new ModelNotFoundException();
         }

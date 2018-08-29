@@ -32,9 +32,9 @@ class Item extends Structure
             ]
         ];
         if ($parameters) {
-            $structure['item']['parameters'] = $item->parameters;
+            $itemParameters = \App\ItemParameter::where('item_id', $item->id)->get();
+            $structure['item'] = ItemParameter::getMany($itemParameters);
         }
-
         return $structure;
     }
 }

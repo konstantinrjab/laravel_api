@@ -101,23 +101,23 @@ class CategoryParametersController extends Controller
         }
     }
 
-    public function update(Request $request, $parameterID)
-    {
-        $values = $this->_getRequestValues($request);
-        $rules = $this->getUpdateRules();
-
-        $validator = Validator::make($values, $rules);
-
-        if ($validator->fails()) {
-            return Error::getStructure(
-                $validator->errors()
-            );
-        }
-        $parameter = CategoryParameter::find($parameterID);
-        $parameter->update($values);
-
-        return response()->json(CategoryParameterStructure::getOne($parameter), 200);
-    }
+//    public function update(Request $request, $parameterID)
+//    {
+//        $values = $this->_getRequestValues($request);
+//        $rules = $this->getUpdateRules();
+//
+//        $validator = Validator::make($values, $rules);
+//
+//        if ($validator->fails()) {
+//            return Error::getStructure(
+//                $validator->errors()
+//            );
+//        }
+//        $parameter = CategoryParameter::find($parameterID);
+//        $parameter->update($values);
+//
+//        return response()->json(CategoryParameterStructure::getOne($parameter), 200);
+//    }
 
     public function delete($parameterID)
     {
