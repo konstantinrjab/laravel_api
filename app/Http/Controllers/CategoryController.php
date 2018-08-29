@@ -106,6 +106,10 @@ class CategoryController extends Controller
 
     public function update(Request $request, $categoryID)
     {
+        $category = Category::find($categoryID);
+        if (is_null($category)) {
+            throw new ModelNotFoundException();
+        }
         $values = $this->_getRequestValues($request);
         $rules = $this->getUpdateRules();
 
@@ -116,7 +120,6 @@ class CategoryController extends Controller
                 $validator->errors()
             );
         }
-        $category = Category::find($categoryID);
         $category->update($values);
 
         return response()->json(CategoryStructure::getOne($category), 200);

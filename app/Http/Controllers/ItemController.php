@@ -188,6 +188,10 @@ class ItemController extends Controller
 
     public function update(Request $request, $itemID)
     {
+        $item = Item::find($itemID);
+        if (is_null($item)) {
+            throw new ModelNotFoundException();
+        }
         $rules = $this->getUpdateRules();
         $validator = Validator::make($request->all(), $rules);
 
@@ -196,7 +200,7 @@ class ItemController extends Controller
                 $validator->errors()
             );
         }
-        $item = Item::find($itemID);
+
         $item->update($request->all());
 
         return response()->json(ItemStructure::getOne($item, true), 200);

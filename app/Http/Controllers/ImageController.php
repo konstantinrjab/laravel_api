@@ -2,28 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Parameter;
+use App\Image;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Structures\Error;
 use Illuminate\Database\QueryException;
 use App\Http\Structures\Parameter as ParameterStructure;
+use App\Http\Structures\Image as ImageStructure;
 use Validator;
 
 
-class ParameterController extends Controller
+class ImageController extends Controller
 {
     private function _getRequestValues($request)
     {
         return [
-            'name' => $request->name,
+            'item_id' => $request->name,
+            'order' => $request->order,
+            'path' => $request->path,
         ];
     }
 
     protected function getRules()
     {
         return [
-            'name' => 'required|unique:categories,name',
+            'item_id' => 'required|exists:items,id',
+            'order' => 'required|integer',
+            'path' => 'required|string',
         ];
     }
     /**
@@ -55,19 +60,19 @@ class ParameterController extends Controller
      *
      * Returns list of projects
      */
-    public function index()
-    {
-        $parameters = Parameter::all();
-        return ParameterStructure::getMany($parameters);
-    }
+//    public function index()
+//    {
+//        $parameters = Image::all();
+//        return ImageStructure::getMany($parameters);
+//    }
 
-    public function show($parameterID)
+    public function show($imageID)
     {
-        $parameter = Parameter::find($parameterID);
-        if(is_null($parameter)){
+        $image = Image::find($imageID);
+        if (is_null($image)) {
             throw new ModelNotFoundException();
         }
-        return ParameterStructure::getOne($parameter);
+        return ImageStructure::getOne($image);
     }
 
     public function store(Request $request)
@@ -83,19 +88,20 @@ class ParameterController extends Controller
         }
 
         try {
-            $parameter = Parameter::create($values);
-            return ParameterStructure::getOne($parameter);
+            $image = Image::create($values);
+            return ParameterStructure::getOne($image);
         } catch (QueryException $e) {
             return Error::getStructure('Unexpected error');
         }
     }
 
-    public function update(Request $request, $parameterID)
+    public function update(Request $request, $imageID)
     {
-        $parameter = Parameter::find($parameterID);
-        if (is_null($parameter)) {
+        $image = Image::find($imageID);
+        if (is_null($image)) {
             throw new ModelNotFoundException();
         }
+
         $values = $this->_getRequestValues($request);
         $rules = $this->getUpdateRules();
 
@@ -106,13 +112,13 @@ class ParameterController extends Controller
                 $validator->errors()
             );
         }
-        $parameter->update($values);
+        $image->update($values);
 
-        return response()->json(ParameterStructure::getOne($parameter), 200);
+        return response()->json(ParameterStructure::getOne($image), 200);
     }
 
-    public function delete($parameterID)
+    public function delete($imageID)
     {
-        return $this->deleteIdentByID($parameterID, '\App\Parameter');
+        return $this->deleteIdentByID($imageID, '\App\Image');
     }
 }

@@ -43,13 +43,8 @@ class Image extends Model
 {
     protected $fillable = ['item_id', 'order', 'path'];
 
-    public function category()
+    public function item()
     {
-        return $this->belongsTo('App\Category');
-    }
-    
-    public function parameters()
-    {
-        return $this->belongsToMany('App\Parameter')->withPivot('value');
+        return $this->belongsTo('App\Item');
     }
 }
