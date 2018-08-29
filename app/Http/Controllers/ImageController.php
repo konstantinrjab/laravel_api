@@ -93,8 +93,8 @@ class ImageController extends Controller
         if ($file) {
             DB::beginTransaction();
             try {
-                $filename = 'item-' . $request->item_id;
-                Storage::disk('local')->put($filename . '.jpg', File::get($file));
+                $filename = 'item-' . $request->item_id . '-' . uniqid() . '.jpg';
+                Storage::disk('public')->put($filename, File::get($file));
                 $image = Image::create([
                     'item_id' => $request->item_id,
                     'order' => $request->order,

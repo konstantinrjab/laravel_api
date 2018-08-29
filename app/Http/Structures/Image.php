@@ -29,7 +29,7 @@ class Image extends Structure
                 'id' => $image->id,
                 'item_id' => $image->item_id,
                 'order' => $image->order,
-                'path' => $image->path,
+                'path' => 'storage/'.$image->path,
                 'created_at' => $image->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $image->updated_at->format('Y-m-d H:i:s'),
         ];
