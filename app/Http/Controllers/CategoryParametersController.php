@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CategoryParameter;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use App\Http\Structures\CategoryParameter as CategoryParameterStructure;
 use App\Http\Structures\Error;
@@ -11,7 +12,21 @@ use Validator;
 
 class CategoryParametersController extends Controller
 {
-    const TABLE_NAME = 'category_parameter';
+    private function _getRequestValues($request)
+    {
+        return [
+            'category_id' => $request->category_id,
+            'parameter_id' => $request->parameter_id
+        ];
+    }
+
+    protected function getRules()
+    {
+        return [
+            'category_id' => 'required|exists:categories,id',
+            'parameter_id' => 'required|exists:parameters,id',
+        ];
+    }
 
     public function index()
     {
@@ -60,20 +75,18 @@ class CategoryParametersController extends Controller
     public function show($categoryParameterID)
     {
         $parameter = CategoryParameter::find($categoryParameterID);
+        if (is_null($parameter)) {
+            throw new ModelNotFoundException();
+        }
         return CategoryParameterStructure::getOne($parameter);
     }
 
     public function store($categoryID, Request $request)
     {
-        $values = [
-            'category_id' => $categoryID,
-            'parameter_id' => $request->parameter_id
-        ];
-
-        $validator = Validator::make($values, [
-            'category_id' => ['required', 'exists:categories,id'],
-            'parameter_id' => ['required', 'exists:parameters,id'],
-        ]);
+        $values = $this->_getRequestValues($request);
+        $values['category_id'] = $categoryID;
+        $rules = $this->getRules();
+        $validator = Validator::make($values, $rules);
 
         if ($validator->fails()) {
             return Error::getStructure(
@@ -88,12 +101,23 @@ class CategoryParametersController extends Controller
         }
     }
 
-    public function update(Request $request, Parameter $parameter)
-    {
-        $parameter->update($request->all());
-
-        return response()->json($parameter, 200);
-    }
+//    public function update(Request $request, $parameterID)
+//    {
+//        $values = $this->_getRequestValues($request);
+//        $rules = $this->getUpdateRules();
+//
+//        $validator = Validator::make($values, $rules);
+//
+//        if ($validator->fails()) {
+//            return Error::getStructure(
+//                $validator->errors()
+//            );
+//        }
+//        $parameter = CategoryParameter::find($parameterID);
+//        $parameter->update($values);
+//
+//        return response()->json(CategoryParameterStructure::getOne($parameter), 200);
+//    }
 
     public function delete($parameterID)
     {

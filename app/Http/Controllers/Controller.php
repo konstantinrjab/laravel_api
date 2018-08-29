@@ -47,4 +47,13 @@ class Controller extends BaseController
             return Error::getStructure('Unexpected error');
         }
     }
+
+    protected function getUpdateRules()
+    {
+        $rules = $this->getRules();
+        foreach ($rules as &$rule){
+            $rule = 'sometimes|'.$rule;
+        }
+        return $rules;
+    }
 }

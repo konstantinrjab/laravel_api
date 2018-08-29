@@ -35,8 +35,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('/categories/{categoryID}/parameters/', 'CategoryParametersController@store')
         ->where('categoryID', '[0-9]+');
-    Route::post('/categories/{categoryID}/parameters/{parameterID}', 'CategoryParametersController@update')
-        ->where('categoryID', '[0-9]+');
+//    Route::post('/categories/parameters/{parameterID}', 'CategoryParametersController@update')
+//        ->where('parameterID', '[0-9]+');
     Route::delete('/categories/parameters/{parameterID}', 'CategoryParametersController@delete')
         ->where('categoryID', '[0-9]+');
 
@@ -44,12 +44,12 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/parameters/{parameterID}', 'ParameterController@update');
     Route::delete('/parameters/{parameterID}', 'ParameterController@delete');
 
-    Route::post('items/{itemID}/parameters', 'ItemParametersController@store')
+    Route::post('items/parameters', 'ItemParametersController@store')
         ->where('itemID', '[0-9]+');
-    Route::post('items/{itemID}/parameters/{parameterID}', 'ItemParametersController@update')
-        ->where('itemID', '[0-9]+');
-    Route::delete('items/{itemID}/parameters/{parameterID}', 'ItemParametersController@delete')
-        ->where(['itemID' => '[0-9]+', 'parameterID' => '[0-9]+']);
+    Route::post('items/parameters/{parameterID}', 'ItemParametersController@update')
+        ->where('parameterID', '[0-9]+');
+    Route::delete('items/parameters/{parameterID}', 'ItemParametersController@delete')
+        ->where('parameterID', '[0-9]+');
 });
 
 Route::post('register', 'Auth\RegisterController@register');
@@ -73,8 +73,6 @@ Route::group(['middleware' => 'responseApi'], function () {
         ->where('itemID', '[0-9]+');
 
     Route::get('items/parameters', 'ItemParametersController@index');
-//    Route::get('items/{itemID}/parameters', 'ItemParametersController@getByItem')
-//        ->where('itemID', '[0-9]+');
 
     Route::get('/parameters', 'ParameterController@index');
     Route::get('/parameters/{parameterID}', 'ParameterController@show')

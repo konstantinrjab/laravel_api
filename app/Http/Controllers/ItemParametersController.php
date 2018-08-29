@@ -3,16 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\ItemParameter;
-use App\Parameter;
 use Illuminate\Http\Request;
 use App\Http\Structures\Error;
 use Illuminate\Database\QueryException;
-use App\Http\Structures\ItemParameter as ItemParametersStructure;
+use App\Http\Structures\ItemParameter as ItemParameterStructure;
 use Validator;
 
 
 class ItemParametersController extends Controller
 {
+    private function _getRequestValues($request)
+    {
+        return [
+            'item_id' => $request->item_id,
+            'parameter_id' => $request->parameter_id,
+            'value' => $request->value,
+        ];
+    }
+
+    protected function getRules()
+    {
+        return [
+            'item_id' => 'required|exists:items,id',
+            'parameter_id' => 'required|exists:parameters,id',
+            'value' => 'required',
+        ];
+    }
+
     /**
      * @SWG\Get(
      *      path="/parameters",
@@ -48,21 +65,11 @@ class ItemParametersController extends Controller
         return ItemParametersStructure::getMany($parameters);
     }
 
-    public function show($itemParameterID)
-    {
-        $parameter = ItemParameter::find($itemParameterID);
-        return ItemParametersStructure::getOne($parameter);
-    }
-
     public function store(Request $request)
     {
-        $values = [
-            'name' => $request->name,
-        ];
-
-        $validator = Validator::make($values, [
-            'name' => 'required|unique:parameters,name',
-        ]);
+        $values = $this->_getRequestValues($request);
+        $rules = $this->getRules();
+        $validator = Validator::make($values, $rules);
 
         if ($validator->fails()) {
             return Error::getStructure(
@@ -72,24 +79,33 @@ class ItemParametersController extends Controller
 
         try {
             $parameter = ItemParameter::create($values);
-            return ItemParametersStructure::getOne($parameter);
+            return ItemParameterStructure::getOne($parameter);
         } catch (QueryException $e) {
-            return Error::getStructure('Unexpected error');
+            return $e;
         }
     }
 
-    public function update(Request $request, Parameter $parameter)
+    public function update(Request $request, $parameterID)
     {
-        $parameter->update($request->all());
+        $values = $this->_getRequestValues($request);
+        $rules = $this->getUpdateRules();
 
-        return response()->json($parameter, 200);
+        $validator = Validator::make($values, $rules);
+
+        if ($validator->fails()) {
+            return Error::getStructure(
+                $validator->errors()
+            );
+        }
+        $parameter = ItemParameter::find($parameterID);
+        $parameter->update($values);
+
+        return response()->json(ItemParameterStructure::getOne($parameter), 200);
     }
 
-    public function delete($itemID, $parameterID)
+    public function delete($parameterID)
     {
-        $parameter = ItemParameter::where('item_id', $itemID)
-            ->where('parameter_id', $parameterID)
-            ->first();
+        $parameter = ItemParameter::find($parameterID);
 
         return $this->deleteIdent($parameter);
     }

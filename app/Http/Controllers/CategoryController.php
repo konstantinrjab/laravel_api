@@ -18,6 +18,20 @@ class CategoryController extends Controller
 {
     const NAME_UNCATEGORIZED = 'Uncategorized';
 
+    private function _getRequestValues($request)
+    {
+        return [
+            'name' => $request->name,
+        ];
+    }
+
+    protected function getRules()
+    {
+        return [
+            'name' => 'required|unique:categories,name',
+        ];
+    }
+
     /**
      * @SWG\Get(
      *      path="/categories",
@@ -63,19 +77,18 @@ class CategoryController extends Controller
             $category = Category::withCount('items')->find($categoryID);
             $items = null;
         }
+        if (is_null($category)) {
+            throw new ModelNotFoundException();
+        }
 
         return CategoryStructure::getOne($category, $items);
     }
 
     public function store(Request $request)
     {
-        $values = [
-            'name' => $request->name,
-        ];
-
-        $validator = Validator::make($values, [
-            'name' => 'required|unique:categories,name',
-        ]);
+        $values = $this->_getRequestValues($request);
+        $rules = $this->getRules();
+        $validator = Validator::make($values, $rules);
 
         if ($validator->fails()) {
             return Error::getStructure(
@@ -91,11 +104,22 @@ class CategoryController extends Controller
         }
     }
 
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $categoryID)
     {
-        $category->update($request->all());
+        $values = $this->_getRequestValues($request);
+        $rules = $this->getUpdateRules();
 
-        return response()->json($category, 200);
+        $validator = Validator::make($values, $rules);
+
+        if ($validator->fails()) {
+            return Error::getStructure(
+                $validator->errors()
+            );
+        }
+        $category = Category::find($categoryID);
+        $category->update($values);
+
+        return response()->json(CategoryStructure::getOne($category), 200);
     }
 
     //add desc: when deleted, items moved to Uncategorized

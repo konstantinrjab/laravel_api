@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Parameter;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Structures\Error;
 use Illuminate\Database\QueryException;
@@ -12,6 +13,19 @@ use Validator;
 
 class ParameterController extends Controller
 {
+    private function _getRequestValues($request)
+    {
+        return [
+            'name' => $request->name,
+        ];
+    }
+
+    protected function getRules()
+    {
+        return [
+            'name' => 'required|unique:categories,name',
+        ];
+    }
     /**
      * @SWG\Get(
      *      path="/parameters",
@@ -50,18 +64,17 @@ class ParameterController extends Controller
     public function show($parameterID)
     {
         $parameter = Parameter::find($parameterID);
+        if(is_null($parameter)){
+            throw new ModelNotFoundException();
+        }
         return ParameterStructure::getOne($parameter);
     }
 
     public function store(Request $request)
     {
-        $values = [
-            'name' => $request->name,
-        ];
-
-        $validator = Validator::make($values, [
-            'name' => 'required|unique:parameters,name',
-        ]);
+        $values = $this->_getRequestValues($request);
+        $rules = $this->getRules();
+        $validator = Validator::make($values, $rules);
 
         if ($validator->fails()) {
             return Error::getStructure(
@@ -77,11 +90,22 @@ class ParameterController extends Controller
         }
     }
 
-    public function update(Request $request, Parameter $parameter)
+    public function update(Request $request, $parameterID)
     {
-        $parameter->update($request->all());
+        $values = $this->_getRequestValues($request);
+        $rules = $this->getUpdateRules();
 
-        return response()->json($parameter, 200);
+        $validator = Validator::make($values, $rules);
+
+        if ($validator->fails()) {
+            return Error::getStructure(
+                $validator->errors()
+            );
+        }
+        $parameter = Parameter::find($parameterID);
+        $parameter->update($values);
+
+        return response()->json(ParameterStructure::getOne($parameter), 200);
     }
 
     public function delete($parameterID)
