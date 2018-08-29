@@ -24,7 +24,6 @@ class Item extends Structure
                 'id' => $item->id,
                 'name' => $item->name,
                 'sku' => $item->sku,
-                'image' => $item->image,
                 'created_at' => $item->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $item->updated_at->format('Y-m-d H:i:s'),
                 'category' => $item->category,

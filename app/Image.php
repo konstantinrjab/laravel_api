@@ -5,12 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /** @SWG\Tag(
- *   name="items",
+ *   name="image",
  *   description="product"
  * )
  *
  * @SWG\Definition(
- *   definition="item",
+ *   definition="image",
  *   @SWG\Property(
  *      property="id",
  *      type="integer",
@@ -39,9 +39,9 @@ use Illuminate\Database\Eloquent\Model;
  *   ),
  * )
  */
-class Item extends Model
+class Image extends Model
 {
-    protected $fillable = ['name', 'category_id', 'price', 'sku'];
+    protected $fillable = ['item_id', 'order', 'path'];
 
     public function category()
     {
