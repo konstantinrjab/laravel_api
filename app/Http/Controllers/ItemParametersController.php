@@ -12,6 +12,8 @@ use Validator;
 
 class ItemParametersController extends Controller
 {
+    const TABLE_NAME = 'item_parameters';
+
     private function _getRequestValues($request)
     {
         return [
@@ -62,7 +64,7 @@ class ItemParametersController extends Controller
     public function index()
     {
         $parameters = ItemParameter::all();
-        return ItemParametersStructure::getMany($parameters);
+        return ItemParameterStructure::getMany($parameters);
     }
 
     public function store(Request $request)
@@ -87,10 +89,8 @@ class ItemParametersController extends Controller
 
     public function update(Request $request, $parameterID)
     {
+        $this->existOrDie($this::TABLE_NAME, $parameterID);
         $parameter = ItemParameter::find($parameterID);
-        if (is_null($parameter)) {
-            throw new ModelNotFoundException();
-        }
 
         $values = $this->_getRequestValues($request);
         $rules = $this->getUpdateRules();
@@ -109,8 +109,8 @@ class ItemParametersController extends Controller
 
     public function delete($parameterID)
     {
-        $parameter = ItemParameter::find($parameterID);
+        $this->existOrDie($this::TABLE_NAME, $parameterID);
 
-        return $this->deleteIdent($parameter);
+        return $this->deleteIdentByID($parameterID, '\App\ItemParameter');
     }
 }

@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 
 class ImageController extends Controller
 {
+    const TABLE_NAME = 'images';
+
     private function _getRequestValues($request)
     {
         return [
@@ -121,6 +123,8 @@ class ImageController extends Controller
 
     public function delete($imageID)
     {
+        $this->existOrDie($this::TABLE_NAME, $imageID);
+
         return $this->deleteIdentByID($imageID, '\App\Image');
     }
 }

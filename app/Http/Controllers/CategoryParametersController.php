@@ -12,6 +12,8 @@ use Validator;
 
 class CategoryParametersController extends Controller
 {
+    const TABLE_NAME = 'category_parameter';
+
     private function _getRequestValues($request)
     {
         return [
@@ -74,10 +76,9 @@ class CategoryParametersController extends Controller
 
     public function show($categoryParameterID)
     {
+        $this->existOrDie($this::TABLE_NAME, $categoryParameterID);
         $parameter = CategoryParameter::find($categoryParameterID);
-        if (is_null($parameter)) {
-            throw new ModelNotFoundException();
-        }
+
         return CategoryParameterStructure::getOne($parameter);
     }
 
@@ -101,26 +102,10 @@ class CategoryParametersController extends Controller
         }
     }
 
-//    public function update(Request $request, $parameterID)
-//    {
-//        $values = $this->_getRequestValues($request);
-//        $rules = $this->getUpdateRules();
-//
-//        $validator = Validator::make($values, $rules);
-//
-//        if ($validator->fails()) {
-//            return Error::getStructure(
-//                $validator->errors()
-//            );
-//        }
-//        $parameter = CategoryParameter::find($parameterID);
-//        $parameter->update($values);
-//
-//        return response()->json(CategoryParameterStructure::getOne($parameter), 200);
-//    }
-
     public function delete($parameterID)
     {
+        $this->existOrDie($this::TABLE_NAME, $parameterID);
+
         return $this->deleteIdentByID($parameterID, '\App\CategoryParameter');
     }
 }

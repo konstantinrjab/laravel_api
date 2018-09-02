@@ -114,18 +114,10 @@ class CategoryController extends Controller
      */
     public function show($categoryID)
     {
-        if (Input::get('items') == 'true') {
-            $category = Category::with('items')->find($categoryID);
-            $items = $category->items;
-        } else {
-            $category = Category::withCount('items')->find($categoryID);
-            $items = null;
-        }
-        if (is_null($category)) {
-            throw new ModelNotFoundException();
-        }
+        $this->existOrDie('categories', $categoryID);
+        $category = Category::with('items')->find($categoryID);
 
-        return CategoryStructure::getOne($category, $items);
+        return CategoryStructure::getOne($category, (Input::get('items') == 'true'));
     }
 
     /**
@@ -260,6 +252,40 @@ class CategoryController extends Controller
         return response()->json(CategoryStructure::getOne($category), 200);
     }
 
+    /**
+     * @SWG\Delete(
+     *      path="/categories/{categoryID}",
+     *      tags={"category"},
+     *      summary="Delete category",
+     *      @SWG\Parameter(
+     *          in="path",
+     *          name="categoryID",
+     *          required=true,
+     *          type="integer",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *     ),
+     *     @SWG\Response(
+     *          response=204,
+     *          description="successful operation",
+     *     ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="error",
+     *                  type="object",
+     *                  ref="#definitions/error"
+     *              ),
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     *
+     * Delete category
+     */
     //add desc: when deleted, items moved to Uncategorized
     public function delete($categoryID)
     {

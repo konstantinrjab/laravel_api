@@ -13,12 +13,12 @@ namespace App\Http\Structures;
  */
 class Error
 {
-    public static function getStructure($message)
+    public static function getStructure($message, $code = 400)
     {
         $structure = [
             'error' => $message,
         ];
 
-        return $structure;
+        return response()->json($structure, $code);
     }
 }

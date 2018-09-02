@@ -13,6 +13,8 @@ use Validator;
 
 class ParameterController extends Controller
 {
+    const TABLE_NAME = 'parameters';
+
     private function _getRequestValues($request)
     {
         return [
@@ -64,10 +66,9 @@ class ParameterController extends Controller
 
     public function show($parameterID)
     {
+        $this->existOrDie($this::TABLE_NAME, $parameterID);
+
         $parameter = Parameter::find($parameterID);
-        if(is_null($parameter)){
-            throw new ModelNotFoundException();
-        }
         return ParameterStructure::getOne($parameter);
     }
 
@@ -93,10 +94,9 @@ class ParameterController extends Controller
 
     public function update(Request $request, $parameterID)
     {
+        $this->existOrDie($this::TABLE_NAME, $parameterID);
+
         $parameter = Parameter::find($parameterID);
-        if (is_null($parameter)) {
-            throw new ModelNotFoundException();
-        }
         $values = $this->_getRequestValues($request);
         $rules = $this->getUpdateRules();
 
@@ -114,6 +114,8 @@ class ParameterController extends Controller
 
     public function delete($parameterID)
     {
+        $this->existOrDie($this::TABLE_NAME, $parameterID);
+
         return $this->deleteIdentByID($parameterID, '\App\Parameter');
     }
 }

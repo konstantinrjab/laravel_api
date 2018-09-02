@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Structures\Error;
 use Illuminate\Database\QueryException;
-
+use Validator;
 
 /**
  * @SWG\Swagger(
@@ -37,12 +38,9 @@ class Controller extends BaseController
 
     protected function deleteIdent($ident)
     {
-        if (is_null($ident)) {
-            return response()->json(Error::getStructure('resource not found'), 404);
-        }
         try {
             $ident->delete();
-            return response()->json('success', 200);
+            return response()->json(null, 204);
         } catch (QueryException $e) {
             return Error::getStructure('Unexpected error');
         }
@@ -51,9 +49,17 @@ class Controller extends BaseController
     protected function getUpdateRules()
     {
         $rules = $this->getRules();
-        foreach ($rules as &$rule){
-            $rule = 'sometimes|'.$rule;
+        foreach ($rules as &$rule) {
+            $rule = 'sometimes|' . $rule;
         }
         return $rules;
+    }
+
+    protected function existOrDie($tablelName, $id)
+    {
+        $validator = Validator::make(['id' => $id], ['id' => "exists:$tablelName,id"]);
+        if ($validator->fails()) {
+            throw new ModelNotFoundException();
+        }
     }
 }
