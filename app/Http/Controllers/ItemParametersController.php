@@ -34,10 +34,10 @@ class ItemParametersController extends Controller
 
     /**
      * @SWG\Get(
-     *      path="items/parameters",
-     *      tags={"parameter"},
-     *      summary="Get list of parameters",
-     *      description="Returns list of parameters",
+     *      path="items/parameters/",
+     *      tags={"itemParameter"},
+     *      summary="Get list of itemParameters",
+     *      description="Returns list of itemParameters",
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",
@@ -49,7 +49,7 @@ class ItemParametersController extends Controller
      *              @SWG\Property(
      *                  property="parameters",
      *                  type="array",
-     *                  @SWG\Items(ref="#definitions/parameter")
+     *                  @SWG\Items(ref="#definitions/itemParameter")
      *              ),
      *          )
      *     ),

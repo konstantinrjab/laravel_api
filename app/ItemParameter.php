@@ -7,24 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 /** @SWG\Definition(
  *   definition="itemParameter",
  *   @SWG\Property(
- *      property="id",
- *      type="integer",
- *      description="ItemParameter ID"
- *   ),
- *   @SWG\Property(
- *      property="item_id",
- *      type="integer",
- *      description="Item ID"
- *   ),
- *   @SWG\Property(
- *      property="parameter_id",
- *      type="integer",
- *      description="Parameter ID"
- *   ),
- *   @SWG\Property(
- *      property="value",
- *      type="sting",
- *      description="Value"
+ *      property="itemParameter",
+ *      type="object",
+ *      @SWG\Property(
+ *         property="id",
+ *         type="integer",
+ *         description="ItemParameter ID"
+ *      ),
+ *      @SWG\Property(
+ *         property="item_id",
+ *         type="integer",
+ *         description="Item ID"
+ *      ),
+ *      @SWG\Property(
+ *         property="parameter_id",
+ *         type="integer",
+ *         description="Parameter ID"
+ *      ),
+ *      @SWG\Property(
+ *         property="value",
+ *         type="sting",
+ *         description="Value"
+ *      ),
  *   ),
  * )
  */

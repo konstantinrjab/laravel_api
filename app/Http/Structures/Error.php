@@ -5,10 +5,14 @@ namespace App\Http\Structures;
 /** @SWG\Definition(
  *   definition="error",
  *   @SWG\Property(
- *      property="message",
- *      type="string",
- *      description="Category ID"
- *   ),
+ *      property="error",
+ *      type="object",
+ *      @SWG\Property(
+ *         property="message",
+ *         type="string",
+ *         description="message"
+ *      ),
+ *   )
  * )
  */
 class Error

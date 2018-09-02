@@ -12,26 +12,30 @@ use Illuminate\Database\Eloquent\Model;
  * @SWG\Definition(
  *   definition="category",
  *   @SWG\Property(
- *      property="id",
- *      type="integer",
- *      description="Category ID"
- *   ),
- *   @SWG\Property(
- *      property="name",
- *      type="string",
- *      description="Category Name"
- *   ),
- *   @SWG\Property(
- *      property="created_at",
- *      type="string",
- *   ),
- *   @SWG\Property(
- *      property="updated_at",
- *      type="string",
- *   ),
- *     @SWG\Property(
- *      property="items_count",
- *      type="integer",
+ *      property="category",
+ *      type="object",
+ *      @SWG\Property(
+ *         property="id",
+ *         type="integer",
+ *         description="Category ID"
+ *      ),
+ *      @SWG\Property(
+ *         property="name",
+ *         type="string",
+ *         description="Category Name"
+ *      ),
+ *      @SWG\Property(
+ *          property="created_at",
+ *          type="string",
+ *      ),
+ *      @SWG\Property(
+ *          property="updated_at",
+ *          type="string",
+ *      ),
+ *      @SWG\Property(
+ *         property="items_count",
+ *         type="integer",
+ *      ),
  *   ),
  * )
  */

@@ -12,25 +12,29 @@ use Illuminate\Database\Eloquent\Model;
  * @SWG\Definition(
  *   definition="categoryParameter",
  *   @SWG\Property(
- *      property="id",
- *      type="integer",
- *   ),
- *   @SWG\Property(
- *      property="category_id",
- *      type="integer",
- *   ),
- *     @SWG\Property(
- *      property="parameter_id",
- *      type="integer",
- *   ),
- *   @SWG\Property(
- *      property="created_at",
- *      type="string",
- *   ),
- *   @SWG\Property(
- *      property="updated_at",
- *      type="string",
- *   ),
+ *      property="parameter",
+ *      type="object",
+ *      @SWG\Property(
+ *         property="id",
+ *         type="integer",
+ *      ),
+ *      @SWG\Property(
+ *         property="category_id",
+ *         type="integer",
+ *      ),
+ *        @SWG\Property(
+ *         property="parameter_id",
+ *         type="integer",
+ *      ),
+ *      @SWG\Property(
+ *         property="created_at",
+ *         type="string",
+ *      ),
+ *      @SWG\Property(
+ *         property="updated_at",
+ *         type="string",
+ *      )
+ *   )
  * )
  */
 class CategoryParameter extends Model

@@ -12,23 +12,27 @@ use Illuminate\Database\Eloquent\Model;
  * @SWG\Definition(
  *   definition="parameter",
  *   @SWG\Property(
- *      property="id",
- *      type="integer",
- *      description="Parameter ID"
- *   ),
- *   @SWG\Property(
- *      property="name",
- *      type="string",
- *      description="Parameter Name"
- *   ),
- *   @SWG\Property(
- *      property="created_at",
- *      type="string",
- *   ),
- *   @SWG\Property(
- *      property="updated_at",
- *      type="string",
- *   ),
+ *      property="parameter",
+ *      type="object",
+ *      @SWG\Property(
+ *         property="id",
+ *         type="integer",
+ *         description="Parameter ID"
+ *      ),
+ *      @SWG\Property(
+ *         property="name",
+ *         type="string",
+ *         description="Parameter Name"
+ *      ),
+ *      @SWG\Property(
+ *         property="created_at",
+ *         type="string",
+ *      ),
+ *      @SWG\Property(
+ *         property="updated_at",
+ *         type="string",
+ *      ),
+ *   )
  * )
  */
 class Parameter extends Model

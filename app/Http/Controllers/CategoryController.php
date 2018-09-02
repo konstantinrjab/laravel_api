@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Structures\Category as CategoryStructure;
-use App\Http\Structures\CategoryParameter;
 use App\Http\Structures\Error;
 use App\Item;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -44,11 +43,7 @@ class CategoryController extends Controller
      *          response=200,
      *          description="successful operation",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="categories",
-     *                  type="array",
-     *                  @SWG\Items(ref="#definitions/category")
-     *              ),
+     *              @SWG\Items(ref="#definitions/category")
      *          ),
      *     ),
      *     @SWG\Response(
@@ -91,25 +86,17 @@ class CategoryController extends Controller
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",
-     *              @SWG\Schema(
-     *                  @SWG\Property(
-     *                      property="category",
-     *                      type="object",
-     *                      ref="#definitions/category"
-     *                  ),
-     *              ),
+     *          @SWG\Schema(
+     *              ref="#definitions/category"
      *          ),
-     *     @SWG\Response(
+     *      ),
+     *      @SWG\Response(
      *          response="default",
      *          description="Error",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="error",
-     *                  type="object",
-     *                  ref="#definitions/error"
-     *              ),
+     *              ref="#definitions/error"
      *          )
-     *     ),
+     *      ),
      *  )
      *
      * Get Category
@@ -140,22 +127,14 @@ class CategoryController extends Controller
      *          response=200,
      *          description="successful operation",
      *              @SWG\Schema(
-     *                  @SWG\Property(
-     *                      property="category",
-     *                      type="object",
-     *                      ref="#definitions/category"
-     *                  ),
+     *                  ref="#definitions/category"
      *              ),
      *          ),
      *     @SWG\Response(
      *          response="default",
      *          description="Error",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="error",
-     *                  type="object",
-     *                  ref="#definitions/error"
-     *              ),
+     *              ref="#definitions/error"
      *          )
      *     ),
      *     security={{"api_key":{}}}
@@ -221,11 +200,7 @@ class CategoryController extends Controller
      *          response="default",
      *          description="Error",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="error",
-     *                  type="object",
-     *                  ref="#definitions/error"
-     *              ),
+     *              ref="#definitions/error"
      *          )
      *     ),
      *     security={{"api_key":{}}}
@@ -277,11 +252,7 @@ class CategoryController extends Controller
      *          response="default",
      *          description="Error",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="error",
-     *                  type="object",
-     *                  ref="#definitions/error"
-     *              ),
+     *              ref="#definitions/error"
      *          )
      *     ),
      *     security={{"api_key":{}}}

@@ -161,11 +161,7 @@ class ItemController extends Controller
      *          response=200,
      *          description="successful operation",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="item",
-     *                  type="object",
-     *                  ref="#definitions/item"
-     *              ),
+     *              ref="#definitions/item"
      *          ),
      *     ),
      *     @SWG\Response(
@@ -186,7 +182,7 @@ class ItemController extends Controller
 
     /**
      * @SWG\Post(
-     *      path="/items",
+     *      path="/items/",
      *      tags={"categoryParameter"},
      *      summary="Add categoryParameter",
      *      @SWG\Parameter(
@@ -228,23 +224,15 @@ class ItemController extends Controller
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",
-     *              @SWG\Schema(
-     *                  @SWG\Property(
-     *                      property="item",
-     *                      type="object",
-     *                      ref="#definitions/item"
-     *                  ),
-     *              ),
+     *          @SWG\Schema(
+     *              ref="#definitions/item"
      *          ),
+     *     ),
      *     @SWG\Response(
      *          response="default",
      *          description="Error",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="error",
-     *                  type="object",
-     *                  ref="#definitions/error"
-     *              ),
+     *              ref="#definitions/error"
      *          )
      *     ),
      *     security={{"api_key":{}}}
@@ -290,7 +278,7 @@ class ItemController extends Controller
 
     /**
      * @SWG\Post(
-     *      path="/items/{itemID}",
+     *      path="/items/{itemID}/",
      *      tags={"item"},
      *      summary="Update item",
      *      @SWG\Parameter(
@@ -338,22 +326,14 @@ class ItemController extends Controller
      *          response=200,
      *          description="successful operation",
      *              @SWG\Schema(
-     *                  @SWG\Property(
-     *                      property="item",
-     *                      type="object",
-     *                      ref="#definitions/item"
-     *                  ),
+     *                  ref="#definitions/item"
      *              ),
      *          ),
      *     @SWG\Response(
      *          response="default",
      *          description="Error",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="error",
-     *                  type="object",
-     *                  ref="#definitions/error"
-     *              ),
+     *              ref="#definitions/error"
      *          )
      *     ),
      *     security={{"api_key":{}}}
@@ -402,11 +382,7 @@ class ItemController extends Controller
      *          response="default",
      *          description="Error",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="error",
-     *                  type="object",
-     *                  ref="#definitions/error"
-     *              ),
+     *              ref="#definitions/error"
      *          )
      *     ),
      *     security={{"api_key":{}}}

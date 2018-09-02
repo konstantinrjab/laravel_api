@@ -120,10 +120,7 @@ class CategoryParametersController extends Controller
      *          response=200,
      *          description="successful operation",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="parameter",
-     *                  ref="#definitions/categoryParameter"
-     *              ),
+     *              ref="#definitions/categoryParameter"
      *          ),
      *     ),
      *     @SWG\Response(
@@ -132,6 +129,8 @@ class CategoryParametersController extends Controller
      *     )
      *  )
      *
+     * @param $categoryParameterID
+     * @return mixed
      * Returns item
      */
     public function show($categoryParameterID)
@@ -166,22 +165,14 @@ class CategoryParametersController extends Controller
      *          response=200,
      *          description="successful operation",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="item",
-     *                  type="object",
-     *                  ref="#definitions/categoryParameter"
-     *              ),
+     *              ref="#definitions/categoryParameter"
      *          ),
      *     ),
      *     @SWG\Response(
      *          response="default",
      *          description="Error",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="error",
-     *                  type="object",
-     *                  ref="#definitions/error"
-     *              ),
+     *              ref="#definitions/error"
      *          )
      *     ),
      *     security={{"api_key":{}}}
@@ -230,11 +221,7 @@ class CategoryParametersController extends Controller
      *          response="default",
      *          description="Error",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="error",
-     *                  type="object",
-     *                  ref="#definitions/error"
-     *              ),
+     *              ref="#definitions/error"
      *          )
      *     ),
      *     security={{"api_key":{}}}
