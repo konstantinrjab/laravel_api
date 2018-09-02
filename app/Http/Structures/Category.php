@@ -30,7 +30,7 @@ class Category extends Structure
         self::_addItemsCount($category, $structure);
 
         if ($items) {
-            $structure['category']['items'] = $items;
+            $structure[self::getKeyOne()]['items'] = $items;
         }
 
         return $structure;

@@ -13,14 +13,15 @@ use Illuminate\Http\Request;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    Auth::guard('api')->user(); // instance of the logged user
-//    Auth::guard('api')->check(); // if a user is authenticated
-//    Auth::guard('api')->id(); // the id of the authenticated user
-//    return $request->user();
-//});
 
 Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('/user', function (Request $request) {
+        Auth::guard('api')->user(); // instance of the logged user
+        Auth::guard('api')->check(); // if a user is authenticated
+        Auth::guard('api')->id(); // the id of the authenticated user
+        return $request->user();
+    });
+
     Route::post('categories/', 'CategoryController@store');
     Route::post('categories/{categoryID}', 'CategoryController@update')
         ->where('categoryID', '[0-9]+');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Structures\Category as CategoryStructure;
+use App\Http\Structures\CategoryParameter;
 use App\Http\Structures\Error;
 use App\Item;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -63,9 +64,57 @@ class CategoryController extends Controller
         return CategoryStructure::getMany($categories);
     }
 
+    /**
+     * @SWG\Get(
+     *      path="/categories/{categoryID}",
+     *      tags={"category"},
+     *      summary="Get category",
+     *      @SWG\Parameter(
+     *          in="path",
+     *          name="categoryID",
+     *          required=true,
+     *          type="integer",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="query",
+     *          name="items",
+     *          type="boolean",
+     *          @SWG\Schema(
+     *              example="true"
+     *          ),
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *              @SWG\Schema(
+     *                  @SWG\Property(
+     *                      property="category",
+     *                      type="object",
+     *                      ref="#definitions/category"
+     *                  ),
+     *              ),
+     *          ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="error",
+     *                  type="object",
+     *                  ref="#definitions/error"
+     *              ),
+     *          )
+     *     ),
+     *  )
+     *
+     * Get Category
+     */
     public function show($categoryID)
     {
-        if (Input::get('items')) {
+        if (Input::get('items') == 'true') {
             $category = Category::with('items')->find($categoryID);
             $items = $category->items;
         } else {
@@ -140,6 +189,56 @@ class CategoryController extends Controller
         }
     }
 
+    /**
+     * @SWG\Post(
+     *      path="/categories/{categoryID}",
+     *      tags={"category"},
+     *      summary="Update category",
+     *      @SWG\Parameter(
+     *          in="path",
+     *          name="categoryID",
+     *          required=true,
+     *          type="integer",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="name",
+     *          required=true,
+     *          type="string",
+     *          @SWG\Schema(
+     *              example="test name 1"
+     *          ),
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *              @SWG\Schema(
+     *                  @SWG\Property(
+     *                      property="category",
+     *                      type="object",
+     *                      ref="#definitions/category"
+     *                  ),
+     *              ),
+     *          ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="error",
+     *                  type="object",
+     *                  ref="#definitions/error"
+     *              ),
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     *
+     * Update Category
+     */
     public function update(Request $request, $categoryID)
     {
         $category = Category::find($categoryID);
@@ -188,10 +287,5 @@ class CategoryController extends Controller
             return Error::getStructure('Unexpected error');
         }
 
-    }
-
-    public function getWithItems($id)
-    {
-        return Category::with(['items'])->find($id);
     }
 }
