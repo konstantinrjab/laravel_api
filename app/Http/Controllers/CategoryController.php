@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
+    const TABLE_NAME = 'categories';
     const NAME_UNCATEGORIZED = 'Uncategorized';
 
     private function _getRequestValues($request)
@@ -114,7 +115,7 @@ class CategoryController extends Controller
      */
     public function show($categoryID)
     {
-        $this->existOrDie('categories', $categoryID);
+        $this->existOrDie($this::TABLE_NAME, $categoryID);
         $category = Category::with('items')->find($categoryID);
 
         return CategoryStructure::getOne($category, (Input::get('items') == 'true'));
@@ -257,6 +258,7 @@ class CategoryController extends Controller
      *      path="/categories/{categoryID}",
      *      tags={"category"},
      *      summary="Delete category",
+     *      description="Items from delete category moves to category: Uncategorized",
      *      @SWG\Parameter(
      *          in="path",
      *          name="categoryID",
@@ -289,6 +291,8 @@ class CategoryController extends Controller
     //add desc: when deleted, items moved to Uncategorized
     public function delete($categoryID)
     {
+        $this->existOrDie($this::TABLE_NAME, $categoryID);
+
         $uncategorized = Category::where('name', $this::NAME_UNCATEGORIZED)->first();
         if (is_null($uncategorized)) {
             return response()->json(
@@ -297,10 +301,10 @@ class CategoryController extends Controller
             );
         }
         if ($categoryID == $uncategorized->id) {
-            return response()->json(
-                Error::getStructure('Cant delete default uncategorized category: ' . $this::NAME_UNCATEGORIZED),
+            return Error::getStructure(
+                'Cant delete default uncategorized category: ' . $this::NAME_UNCATEGORIZED,
                 400
-            );
+                );
         }
         DB::beginTransaction();
         try {

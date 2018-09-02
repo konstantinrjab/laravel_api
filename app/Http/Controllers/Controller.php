@@ -38,6 +38,9 @@ class Controller extends BaseController
 
     protected function deleteIdent($ident)
     {
+        if (is_null($ident)) {
+            return response()->json(Error::getStructure('resource not found'), 404);
+        }
         try {
             $ident->delete();
             return response()->json(null, 204);
