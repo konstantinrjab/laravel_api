@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\CategoryParameter;
 use App\Http\Structures\Error;
 use App\Parameter;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Item;
 use App\Http\Structures\Item as ItemStructure;
@@ -99,7 +98,9 @@ class ItemController extends Controller
             array_flip($this->itemParameters),
             array_flip($this->categoryParameters)
         );
+
         $additionalParameters = Parameter::whereIn('name', array_keys($additionalParameters))->get(['id', 'name']);
+        $data = false;
         foreach ($additionalParameters as $parameter) {
             $data[] = [
                 'item_id' => $itemID,
@@ -186,8 +187,8 @@ class ItemController extends Controller
     /**
      * @SWG\Post(
      *      path="/items",
-     *      tags={"item"},
-     *      summary="Add item",
+     *      tags={"categoryParameter"},
+     *      summary="Add categoryParameter",
      *      @SWG\Parameter(
      *          in="formData",
      *          name="category_id",
@@ -249,6 +250,8 @@ class ItemController extends Controller
      *     security={{"api_key":{}}}
      *  )
      *
+     * @param $request
+     * @return mixed
      * Add item
      */
     public function store(Request $request)
@@ -273,7 +276,9 @@ class ItemController extends Controller
             ItemParameter::insert($categoryParameters);
 
             $additionalParameters = $this->_prepareAdditionalParameters($request->all(), $item->id);
-            ItemParameter::insert($additionalParameters);
+            if($additionalParameters){
+                ItemParameter::insert($additionalParameters);
+            }
 
             DB::commit();
             return ItemStructure::getOne($item, true);

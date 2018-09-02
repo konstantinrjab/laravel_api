@@ -31,7 +31,7 @@ class ImageController extends Controller
     protected function getRules()
     {
         return [
-            'item_id' => 'required|exists:items,id',
+            'item_id' => 'required|integer|exists:items,id',
             'order' => 'required|integer',
             'image' => 'required|image|mimes:jpeg|max:2048'
 //            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'

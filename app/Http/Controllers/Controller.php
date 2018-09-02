@@ -14,7 +14,7 @@ use Validator;
 /**
  * @SWG\Swagger(
  *     basePath="/",
- *     schemes={"http", "https"},
+ *     schemes={"http"},
  *     host=L5_SWAGGER_CONST_HOST,
  *     @SWG\Info(
  *         version="1.0.0",
