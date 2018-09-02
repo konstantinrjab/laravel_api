@@ -50,6 +50,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         ->where('parameterID', '[0-9]+');
     Route::delete('items/parameters/{parameterID}', 'ItemParametersController@delete')
         ->where('parameterID', '[0-9]+');
+
+    Route::post('images/', 'ImageController@store');
+    Route::delete('images/{imageID}', 'ImageController@delete')
+        ->where('imageID', '[0-9]+');
 });
 
 Route::post('register', 'Auth\RegisterController@register');
@@ -71,11 +75,12 @@ Route::group(['middleware' => 'responseApi'], function () {
     Route::get('items/', 'ItemController@index');
     Route::get('items/{itemID}', 'ItemController@show')
         ->where('itemID', '[0-9]+');
-
     Route::get('items/parameters', 'ItemParametersController@index');
 
     Route::get('/parameters', 'ParameterController@index');
     Route::get('/parameters/{parameterID}', 'ParameterController@show')
         ->where('parameterID', '[0-9]+');
+
+    Route::get('images/{imageID}', 'ImageController@show');
 });
 

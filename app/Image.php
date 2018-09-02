@@ -5,12 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /** @SWG\Tag(
- *   name="items",
+ *   name="image",
  *   description="product"
  * )
  *
  * @SWG\Definition(
- *   definition="item",
+ *   definition="image",
  *   @SWG\Property(
  *      property="id",
  *      type="integer",
@@ -39,22 +39,12 @@ use Illuminate\Database\Eloquent\Model;
  *   ),
  * )
  */
-class Item extends Model
+class Image extends Model
 {
-    protected $fillable = ['name', 'category_id', 'price', 'sku'];
+    protected $fillable = ['item_id', 'order', 'path'];
 
-    public function category()
+    public function item()
     {
-        return $this->belongsTo('App\Category');
-    }
-
-    public function parameters()
-    {
-        return $this->belongsToMany('App\Parameter')->withPivot('value');
-    }
-
-    public function images()
-    {
-        return $this->hasMany('App\Image');
+        return $this->belongsTo('App\Item');
     }
 }

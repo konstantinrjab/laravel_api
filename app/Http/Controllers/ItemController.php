@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\CategoryParameter;
-use App\Http\Structures\Category;
 use App\Http\Structures\Error;
 use App\Parameter;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -11,7 +10,6 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Item;
 use App\Http\Structures\Item as ItemStructure;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
 use Validator;
 use App\ItemParameter;
@@ -33,7 +31,6 @@ class ItemController extends Controller
             'name' => 'required',
             'sku' => 'required|unique:items',
             'price' => 'integer|min:0',
-            'image' => 'string'
         ];
     }
 
@@ -154,10 +151,11 @@ class ItemController extends Controller
      */
     public function show($itemID)
     {
-        $item = Item::with('category')->find($itemID);
+        $item = Item::with('category', 'images')->find($itemID);
         if (is_null($item)) {
             throw new ModelNotFoundException();
         }
+//        dd($item->images);
         return ItemStructure::getOne($item, true);
     }
 
@@ -191,6 +189,10 @@ class ItemController extends Controller
 
     public function update(Request $request, $itemID)
     {
+        $item = Item::find($itemID);
+        if (is_null($item)) {
+            throw new ModelNotFoundException();
+        }
         $rules = $this->getUpdateRules();
         $validator = Validator::make($request->all(), $rules);
 
@@ -199,7 +201,7 @@ class ItemController extends Controller
                 $validator->errors()
             );
         }
-        $item = Item::find($itemID);
+
         $item->update($request->all());
 
         return response()->json(ItemStructure::getOne($item, true), 200);

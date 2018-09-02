@@ -92,6 +92,10 @@ class ParameterController extends Controller
 
     public function update(Request $request, $parameterID)
     {
+        $parameter = Parameter::find($parameterID);
+        if (is_null($parameter)) {
+            throw new ModelNotFoundException();
+        }
         $values = $this->_getRequestValues($request);
         $rules = $this->getUpdateRules();
 
@@ -102,7 +106,6 @@ class ParameterController extends Controller
                 $validator->errors()
             );
         }
-        $parameter = Parameter::find($parameterID);
         $parameter->update($values);
 
         return response()->json(ParameterStructure::getOne($parameter), 200);
