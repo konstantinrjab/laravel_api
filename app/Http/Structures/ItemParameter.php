@@ -25,10 +25,8 @@ class ItemParameter extends Structure
 
     public static function getOne($parameter)
     {
-        $key = self::getKeyOne();
-
         return [
-            $key => [
+            self::getKeyOne() => [
                 'id' => $parameter->id,
                 'item_id' => $parameter->item_id,
                 'parameter_id' => $parameter->parameter_id,

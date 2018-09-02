@@ -50,8 +50,9 @@ class ParameterController extends Controller
      *     ),
      *     @SWG\Response(
      *          response=400,
-     *          description="Bad request"),
-     *     )
+     *          description="Bad request"
+     *     ),
+     *  )
      *
      * Returns list of projects
      */

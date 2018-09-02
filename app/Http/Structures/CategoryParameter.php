@@ -27,7 +27,7 @@ class CategoryParameter extends Structure
     public static function getOne($parameter)
     {
         return [
-            'parameter' => [
+            self::getKeyOne() => [
                 'id' => $parameter->id,
                 'category_id' => $parameter->category_id,
                 'parameter_id' => $parameter->parameter_id,

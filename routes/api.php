@@ -13,12 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    Auth::guard('api')->user(); // instance of the logged user
-    Auth::guard('api')->check(); // if a user is authenticated
-    Auth::guard('api')->id(); // the id of the authenticated user
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    Auth::guard('api')->user(); // instance of the logged user
+//    Auth::guard('api')->check(); // if a user is authenticated
+//    Auth::guard('api')->id(); // the id of the authenticated user
+//    return $request->user();
+//});
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('categories/', 'CategoryController@store');
@@ -56,11 +56,14 @@ Route::group(['middleware' => 'auth:api'], function () {
         ->where('imageID', '[0-9]+');
 });
 
-Route::post('register', 'Auth\RegisterController@register');
-Route::post('login', 'Auth\LoginController@login');
-Route::post('logout', 'Auth\LoginController@logout');
 
 Route::group(['middleware' => 'responseApi'], function () {
+
+    Route::post('register', 'Auth\RegisterController@register');
+    Route::post('login', 'Auth\LoginController@login');
+    Route::post('logout', 'Auth\LoginController@logout');
+
+
     Route::get('/categories/parameters/', 'CategoryParametersController@index');
     Route::get('/categories/parameters/{categoryParameterID}', 'CategoryParametersController@show')
         ->where('categoryParameterID', '[0-9]+');

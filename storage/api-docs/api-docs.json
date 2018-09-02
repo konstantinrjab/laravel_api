@@ -15,6 +15,30 @@
         "https"
     ],
     "paths": {
+        "/login": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Login User",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "properties": {
+                                "user": {
+                                    "type": "object",
+                                    "$ref": "#definitions/user"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
         "/categories": {
             "get": {
                 "tags": [
@@ -277,6 +301,31 @@
                     "type": "string"
                 }
             }
+        },
+        "user": {
+            "properties": {
+                "id": {
+                    "description": "User ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "User Name",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "User Email",
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "api_token": {
+                    "type": "string"
+                }
+            }
         }
     },
     "tags": [
@@ -295,6 +344,9 @@
         {
             "name": "parameters",
             "description": "products have parameters"
+        },
+        {
+            "name": "user"
         }
     ]
 }

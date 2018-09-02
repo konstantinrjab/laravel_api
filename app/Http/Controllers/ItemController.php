@@ -147,6 +147,7 @@ class ItemController extends Controller
      *          description="Bad request"
      *     )
      *  )
+     *
      * Returns item
      */
     public function show($itemID)

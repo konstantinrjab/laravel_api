@@ -25,10 +25,8 @@ class Parameter extends Structure
 
     public static function getOne($parameter)
     {
-        $key = self::getKeyOne();
-
         return [
-            $key => [
+            self::getKeyOne() => [
                 'id' => $parameter->id,
                 'name' => $parameter->name,
                 'created_at' => $parameter->created_at->format('Y-m-d H:i:s'),

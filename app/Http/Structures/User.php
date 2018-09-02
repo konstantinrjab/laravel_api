@@ -2,25 +2,25 @@
 
 namespace App\Http\Structures;
 
-class Item extends Structure
+class User
 {
-    const KEY_ONE = 'item';
-    const KEY_MANY = 'items';
+    const KEY_ONE = 'user';
+//    const KEY_MANY = 'users';
 
     public static function getKeyOne()
     {
         return self::KEY_ONE;
     }
 
-    public static function getKeyMany()
-    {
-        return self::KEY_MANY;
-    }
+//    public static function getKeyMany()
+//    {
+//        return self::KEY_MANY;
+//    }
 
     public static function getOne($item, $parameters = false)
     {
         $structure = [
-            self::getKeyOne() => [
+            'item' => [
                 'id' => $item->id,
                 'name' => $item->name,
                 'sku' => $item->sku,
@@ -33,7 +33,7 @@ class Item extends Structure
         ];
         if ($parameters) {
             $itemParameters = \App\ItemParameter::where('item_id', $item->id)->get();
-            $structure[self::getKeyOne()] = array_merge($structure[self::getKeyOne()], ItemParameter::getMany($itemParameters));
+            $structure['item'] = array_merge($structure['item'], ItemParameter::getMany($itemParameters));
         }
         return $structure;
     }
