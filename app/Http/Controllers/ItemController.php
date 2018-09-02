@@ -124,7 +124,7 @@ class ItemController extends Controller
      *      tags={"items"},
      *      summary="Get product",
      *      description="Returns product",
-     *      @SWG\ItemParameter(
+     *      @SWG\Parameter(
      *           name="itemID",
      *           in="path",
      *           description="Item ID",
@@ -144,9 +144,9 @@ class ItemController extends Controller
      *     ),
      *     @SWG\Response(
      *          response=400,
-     *          description="Bad request"),
+     *          description="Bad request"
      *     )
-     *
+     *  )
      * Returns item
      */
     public function show($itemID)

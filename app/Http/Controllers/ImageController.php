@@ -35,35 +35,7 @@ class ImageController extends Controller
 //            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ];
     }
-    /**
-     * @SWG\Get(
-     *      path="/parameters",
-     *      operationId="getParametersList",
-     *      tags={"parameters"},
-     *      summary="Get list of parameters",
-     *      description="Returns list of parameters",
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="count",
-     *                  type="integer",
-     *              ),
-     *              @SWG\Property(
-     *                  property="parameters",
-     *                  type="array",
-     *                  @SWG\Items(ref="#definitions/parameter")
-     *              ),
-     *          ),
-     *     ),
-     *     @SWG\Response(
-     *          response=400,
-     *          description="Bad request"),
-     *     )
-     *
-     * Returns list of projects
-     */
+
 //    public function index()
 //    {
 //        $parameters = Image::all();

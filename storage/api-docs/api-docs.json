@@ -4,7 +4,7 @@
         "title": "L5 Swagger API",
         "description": "L5 Swagger API description",
         "contact": {
-            "email": "darius@matulionis.lt"
+            "email": "konstantinrjab@gmail.com"
         },
         "version": "1.0.0"
     },
@@ -18,11 +18,38 @@
         "/categories": {
             "get": {
                 "tags": [
-                    "categories"
+                    "category"
                 ],
                 "summary": "Get list of categories",
                 "description": "Returns list of categories",
-                "operationId": "getCategpriesList",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "properties": {
+                                "categories": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#definitions/category"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/category/{categoryID}/parameters": {
+            "get": {
+                "tags": [
+                    "parameters, category"
+                ],
+                "summary": "Get category parameters",
+                "description": "Returns list of parameters",
+                "operationId": "getCategoryParametersList",
                 "responses": {
                     "200": {
                         "description": "successful operation",
@@ -31,10 +58,10 @@
                                 "count": {
                                     "type": "integer"
                                 },
-                                "categories": {
+                                "parameters": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#definitions/category"
+                                        "$ref": "#definitions/categoryParameter"
                                     }
                                 }
                             }
@@ -71,6 +98,36 @@
                                 "item": {
                                     "type": "object",
                                     "$ref": "#definitions/item"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "items/parameters": {
+            "get": {
+                "tags": [
+                    "parameter"
+                ],
+                "summary": "Get list of parameters",
+                "description": "Returns list of parameters",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "properties": {
+                                "count": {
+                                    "type": "integer"
+                                },
+                                "parameters": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#definitions/parameter"
+                                    }
                                 }
                             }
                         }
@@ -129,6 +186,33 @@
                 },
                 "updated_at": {
                     "type": "string"
+                },
+                "items_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "image": {
+            "properties": {
+                "id": {
+                    "description": "Item ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Item Name",
+                    "type": "string"
+                },
+                "category": {
+                    "$ref": "#definitions/category"
+                },
+                "parameters": {
+                    "type": "object"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
                 }
             }
         },
@@ -156,6 +240,26 @@
                 }
             }
         },
+        "itemParameter": {
+            "properties": {
+                "id": {
+                    "description": "Item ItemParameter ID",
+                    "type": "integer"
+                },
+                "item_id": {
+                    "description": "Item ID",
+                    "type": "integer"
+                },
+                "parameter_id": {
+                    "description": "ItemParameter ID",
+                    "type": "integer"
+                },
+                "value": {
+                    "description": "ItemParameter value",
+                    "type": "sting"
+                }
+            }
+        },
         "parameter": {
             "properties": {
                 "id": {
@@ -167,18 +271,22 @@
                     "type": "string"
                 },
                 "created_at": {
-                    "type": "object"
+                    "type": "string"
                 },
                 "updated_at": {
-                    "type": "object"
+                    "type": "string"
                 }
             }
         }
     },
     "tags": [
         {
-            "name": "categories",
+            "name": "category",
             "description": "have products"
+        },
+        {
+            "name": "image",
+            "description": "product"
         },
         {
             "name": "items",

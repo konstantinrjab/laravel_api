@@ -17,7 +17,7 @@ class Category extends Structure
         return self::KEY_MANY;
     }
 
-    public static function getOne($category, $items = null)
+    public static function getOne($category, $items = false)
     {
         $key = self::getKeyOne();
 

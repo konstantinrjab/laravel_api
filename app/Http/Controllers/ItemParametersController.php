@@ -32,9 +32,8 @@ class ItemParametersController extends Controller
 
     /**
      * @SWG\Get(
-     *      path="/parameters",
-     *      operationId="getParametersList",
-     *      tags={"parameters"},
+     *      path="items/parameters",
+     *      tags={"parameter"},
      *      summary="Get list of parameters",
      *      description="Returns list of parameters",
      *      @SWG\Response(
@@ -50,12 +49,13 @@ class ItemParametersController extends Controller
      *                  type="array",
      *                  @SWG\Items(ref="#definitions/parameter")
      *              ),
-     *          ),
+     *          )
      *     ),
      *     @SWG\Response(
      *          response=400,
-     *          description="Bad request"),
-     *     )
+     *          description="Bad request"
+     *     ),
+     * )
      *
      * Returns list of projects
      */

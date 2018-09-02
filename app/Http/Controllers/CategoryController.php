@@ -35,18 +35,13 @@ class CategoryController extends Controller
     /**
      * @SWG\Get(
      *      path="/categories",
-     *      operationId="getCategpriesList",
-     *      tags={"categories"},
+     *      tags={"category"},
      *      summary="Get list of categories",
      *      description="Returns list of categories",
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="count",
-     *                  type="integer",
-     *              ),
      *              @SWG\Property(
      *                  property="categories",
      *                  type="array",

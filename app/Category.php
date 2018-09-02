@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /** @SWG\Tag(
- *   name="categories",
+ *   name="category",
  *   description="have products"
  * )
  *
@@ -28,6 +28,10 @@ use Illuminate\Database\Eloquent\Model;
  *   @SWG\Property(
  *      property="updated_at",
  *      type="string",
+ *   ),
+ *     @SWG\Property(
+ *      property="items_count",
+ *      type="integer",
  *   ),
  * )
  */
