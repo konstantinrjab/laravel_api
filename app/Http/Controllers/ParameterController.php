@@ -32,7 +32,7 @@ class ParameterController extends Controller
      * @SWG\Get(
      *      path="/parameters",
      *      operationId="getParametersList",
-     *      tags={"parameters"},
+     *      tags={"parameter"},
      *      summary="Get list of parameters",
      *      description="Returns list of parameters",
      *      @SWG\Response(
@@ -51,8 +51,8 @@ class ParameterController extends Controller
      *          ),
      *     ),
      *     @SWG\Response(
-     *          response=400,
-     *          description="Bad request"
+     *          response="default",
+     *          description="Error",
      *     ),
      *  )
      *

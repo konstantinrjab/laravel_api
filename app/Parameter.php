@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /** @SWG\Tag(
- *   name="parameters",
+ *   name="parameter",
  *   description="products have parameters"
  * )
  *

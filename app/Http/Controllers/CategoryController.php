@@ -52,9 +52,10 @@ class CategoryController extends Controller
      *          ),
      *     ),
      *     @SWG\Response(
-     *          response=400,
-     *          description="Bad request"),
-     *     )
+     *          response="default",
+     *          description="Error",
+     *     ),
+     * )
      *
      * Returns list of projects
      */
@@ -230,7 +231,7 @@ class CategoryController extends Controller
      *     security={{"api_key":{}}}
      *  )
      *
-     * Update Category
+     * Update category
      */
     public function update(Request $request, $categoryID)
     {
@@ -288,7 +289,6 @@ class CategoryController extends Controller
      *
      * Delete category
      */
-    //add desc: when deleted, items moved to Uncategorized
     public function delete($categoryID)
     {
         $this->existOrDie($this::TABLE_NAME, $categoryID);

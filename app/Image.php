@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /** @SWG\Tag(
  *   name="image",
- *   description="product"
+ *   description="Product image"
  * )
  *
  * @SWG\Definition(
@@ -14,20 +14,22 @@ use Illuminate\Database\Eloquent\Model;
  *   @SWG\Property(
  *      property="id",
  *      type="integer",
+ *      description="Image ID"
+ *   ),
+ *   @SWG\Property(
+ *      property="item_id",
+ *      type="integer",
  *      description="Item ID"
  *   ),
  *   @SWG\Property(
- *      property="name",
+ *      property="order",
+ *      type="integer",
+ *      description="Image priority order"
+ *   ),
+ *   @SWG\Property(
+ *      property="path",
  *      type="string",
- *      description="Item Name"
- *   ),
- *   @SWG\Property(
- *      property="category",
- *      ref="#definitions/category"
- *   ),
- *   @SWG\Property(
- *      property="parameters",
- *      type="object"
+ *      description="storage/"
  *   ),
  *   @SWG\Property(
  *      property="created_at",

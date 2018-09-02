@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  *   @SWG\Property(
  *      property="id",
  *      type="integer",
- *      description="Item ItemParameter ID"
+ *      description="ItemParameter ID"
  *   ),
  *   @SWG\Property(
  *      property="item_id",
@@ -19,12 +19,12 @@ use Illuminate\Database\Eloquent\Model;
  *   @SWG\Property(
  *      property="parameter_id",
  *      type="integer",
- *      description="ItemParameter ID"
+ *      description="Parameter ID"
  *   ),
  *   @SWG\Property(
  *      property="value",
  *      type="sting",
- *      description="ItemParameter value"
+ *      description="Value"
  *   ),
  * )
  */

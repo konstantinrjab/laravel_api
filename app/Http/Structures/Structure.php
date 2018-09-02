@@ -15,6 +15,9 @@ abstract class Structure
         $structure = [];
         $key = static::getKeyMany();
 
+        if (empty($idents{0})) {
+            return [$key => ''];
+        }
         foreach ($idents as $ident) {
             $structure[$key][] = static::getOne($ident);
         }

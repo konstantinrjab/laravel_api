@@ -59,8 +59,8 @@ class CategoryParametersController extends Controller
      *          ),
      *     ),
      *     @SWG\Response(
-     *          response=400,
-     *          description="Bad request"
+     *          response="default",
+     *          description="Error",
      *      ),
      * )
      *
