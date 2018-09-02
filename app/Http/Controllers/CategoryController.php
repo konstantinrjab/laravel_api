@@ -79,6 +79,47 @@ class CategoryController extends Controller
         return CategoryStructure::getOne($category, $items);
     }
 
+    /**
+     * @SWG\Post(
+     *      path="/categories",
+     *      tags={"category"},
+     *      summary="Create new category",
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="name",
+     *          required=true,
+     *          type="string",
+     *          @SWG\Schema(
+     *              example="test name 1"
+     *          ),
+     *     ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *              @SWG\Schema(
+     *                  @SWG\Property(
+     *                      property="category",
+     *                      type="object",
+     *                      ref="#definitions/category"
+     *                  ),
+     *              ),
+     *          ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="error",
+     *                  type="object",
+     *                  ref="#definitions/error"
+     *              ),
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     *
+     * Add Category
+     */
     public function store(Request $request)
     {
         $values = $this->_getRequestValues($request);

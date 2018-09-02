@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Structures\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+//    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -56,22 +57,27 @@ class LoginController extends Controller
      *      path="/login",
      *      tags={"user"},
      *      summary="Login User",
-     *     @SWG\Schema(
-     *          @SWG\Parameter(
-     *              name="email",
-     *              in="body",
-     *              description="User Email",
-     *              required=true,
-     *              type="string",
-     *          ),
-     *          @SWG\Parameter(
-     *              name="password",
-     *              in="body",
-     *              description="User Password",
-     *              required=true,
-     *              type="string",
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="email",
+     *          required=true,
+     *          type="string",
+     *          format="email",
+     *          description="User Email",
+     *          @SWG\Schema(
+     *              example="admin@test.com"
      *          ),
      *     ),
+     *     @SWG\Parameter(
+     *          in="formData",
+     *          name="password",
+     *          required=true,
+     *          type="string",
+     *          description="User Password",
+     *          @SWG\Schema(
+     *              example="secret_pass"
+     *          ),
+     *      ),
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",
@@ -84,8 +90,15 @@ class LoginController extends Controller
      *              ),
      *     ),
      *     @SWG\Response(
-     *          response=400,
-     *          description="Bad request"
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="error",
+     *                  type="object",
+     *                  ref="#definitions/error"
+     *              ),
+     *          )
      *     )
      *  )
      *
@@ -99,9 +112,7 @@ class LoginController extends Controller
             $user = $this->guard()->user();
             $user->generateToken();
 
-            return response()->json([
-                'user' => $user->toArray(),
-            ]);
+            return User::getOne($user);
         }
 
         return $this->sendFailedLoginResponse($request);

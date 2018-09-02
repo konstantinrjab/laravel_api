@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
@@ -61,7 +62,14 @@ class Handler extends ExceptionHandler
             ], 404);
         }
 
+        if ($exception instanceof ValidationException) {
+            return response()->json([
+                'error' => $exception->errors()
+            ], 400);
+        }
+
         return parent::render($request, $exception);
+//        return response()->json('Unexpected error.', 500);
     }
 
     protected function unauthenticated($request, AuthenticationException $exception)

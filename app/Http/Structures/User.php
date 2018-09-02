@@ -17,24 +17,19 @@ class User
 //        return self::KEY_MANY;
 //    }
 
-    public static function getOne($item, $parameters = false)
+    public static function getOne($user)
     {
         $structure = [
-            'item' => [
-                'id' => $item->id,
-                'name' => $item->name,
-                'sku' => $item->sku,
-                'created_at' => $item->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $item->updated_at->format('Y-m-d H:i:s'),
-                'category' => $item->category,
-                'price' => $item->price,
-                'images' => $item->images
+            self::getKeyOne() => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'created_at' => $user->created_at->format('Y-m-d H:i:s'),
+                'updated_at' => $user->updated_at->format('Y-m-d H:i:s'),
+                'api_token' => $user->api_token,
             ]
         ];
-        if ($parameters) {
-            $itemParameters = \App\ItemParameter::where('item_id', $item->id)->get();
-            $structure['item'] = array_merge($structure['item'], ItemParameter::getMany($itemParameters));
-        }
+
         return $structure;
     }
 }
