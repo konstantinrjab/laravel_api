@@ -115,7 +115,7 @@ class ItemController extends Controller
 
     /**
      * @SWG\Get(
-     *      path="/items",
+     *      path="/items/",
      *      tags={"item"},
      *      summary="Get list of items",
      *      description="Returns list of items",
@@ -135,8 +135,6 @@ class ItemController extends Controller
      *          description="Error",
      *     ),
      * )
-     *
-     * Returns list of projects
      */
     public function index()
     {
@@ -169,8 +167,6 @@ class ItemController extends Controller
      *          description="Error",
      *     )
      *  )
-     *
-     * Returns item
      */
     public function show($itemID)
     {
@@ -237,10 +233,6 @@ class ItemController extends Controller
      *     ),
      *     security={{"api_key":{}}}
      *  )
-     *
-     * @param $request
-     * @return mixed
-     * Add item
      */
     public function store(Request $request)
     {
@@ -338,8 +330,6 @@ class ItemController extends Controller
      *     ),
      *     security={{"api_key":{}}}
      *  )
-     *
-     * Update item
      */
     public function update(Request $request, $itemID)
     {
@@ -384,11 +374,9 @@ class ItemController extends Controller
      *          @SWG\Schema(
      *              ref="#definitions/error"
      *          )
-     *     ),
+     *      ),
      *     security={{"api_key":{}}}
      *  )
-     *
-     * Delete item
      */
     public function delete($itemID)
     {

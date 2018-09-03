@@ -25,13 +25,13 @@ class ParameterController extends Controller
     protected function getRules()
     {
         return [
-            'name' => 'required|unique:categories,name',
+            'name' => 'required|unique:parameters,name',
         ];
     }
+
     /**
      * @SWG\Get(
-     *      path="/parameters",
-     *      operationId="getParametersList",
+     *      path="/parameters/",
      *      tags={"parameter"},
      *      summary="Get list of parameters",
      *      description="Returns list of parameters",
@@ -39,10 +39,6 @@ class ParameterController extends Controller
      *          response=200,
      *          description="successful operation",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="count",
-     *                  type="integer",
-     *              ),
      *              @SWG\Property(
      *                  property="parameters",
      *                  type="array",
@@ -54,7 +50,7 @@ class ParameterController extends Controller
      *          response="default",
      *          description="Error",
      *     ),
-     *  )
+     * )
      *
      * Returns list of projects
      */
@@ -72,6 +68,40 @@ class ParameterController extends Controller
         return ParameterStructure::getOne($parameter);
     }
 
+    /**
+     * @SWG\Post(
+     *      path="/parameters/",
+     *      tags={"parameter"},
+     *      summary="Add parameter",
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="name",
+     *          type="string",
+     *          required=true,
+     *          @SWG\Schema(
+     *              example="test name"
+     *          ),
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *          @SWG\Schema(
+     *              ref="#definitions/parameter"
+     *          ),
+     *     ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              ref="#definitions/error"
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     *
+     * @param $request
+     * @return mixed
+     */
     public function store(Request $request)
     {
         $values = $this->_getRequestValues($request);
@@ -92,6 +122,46 @@ class ParameterController extends Controller
         }
     }
 
+    /**
+     * @SWG\Post(
+     *      path="/parameters/{parameterID}/",
+     *      tags={"item"},
+     *      summary="Update item",
+     *      @SWG\Parameter(
+     *          in="path",
+     *          name="parameterID",
+     *          required=true,
+     *          type="integer",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="name",
+     *          required=true,
+     *          type="string",
+     *          @SWG\Schema(
+     *              example="new test name"
+     *          ),
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *              @SWG\Schema(
+     *                  ref="#definitions/parameter"
+     *              ),
+     *          ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              ref="#definitions/error"
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     */
     public function update(Request $request, $parameterID)
     {
         $this->existOrDie($this::TABLE_NAME, $parameterID);
@@ -112,6 +182,36 @@ class ParameterController extends Controller
         return response()->json(ParameterStructure::getOne($parameter), 200);
     }
 
+    /**
+     * @SWG\Delete(
+     *      path="/parameters/{parameterID}",
+     *      tags={"parameters"},
+     *      summary="Delete parameter",
+     *      @SWG\Parameter(
+     *          in="path",
+     *          name="parameterID",
+     *          required=true,
+     *          type="integer",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *     ),
+     *     @SWG\Response(
+     *          response=204,
+     *          description="successful operation",
+     *     ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              ref="#definitions/error"
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     *
+     * Delete item
+     */
     public function delete($parameterID)
     {
         $this->existOrDie($this::TABLE_NAME, $parameterID);

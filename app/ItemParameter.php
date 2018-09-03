@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  *      ),
  *      @SWG\Property(
  *         property="value",
- *         type="sting",
+ *         type="string",
  *         description="Value"
  *      ),
  *   ),

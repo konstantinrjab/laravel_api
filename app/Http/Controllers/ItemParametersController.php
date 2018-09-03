@@ -83,7 +83,7 @@ class ItemParametersController extends Controller
      *          type="string",
      *          required=true,
      *          @SWG\Schema(
-     *              example="test name 1"
+     *              example="1"
      *          ),
      *      ),
      *      @SWG\Parameter(
@@ -92,7 +92,7 @@ class ItemParametersController extends Controller
      *          type="string",
      *          required=true,
      *          @SWG\Schema(
-     *              example="1"
+     *              example="val 1"
      *          ),
      *      ),
      *      @SWG\Response(
