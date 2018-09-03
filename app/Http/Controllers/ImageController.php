@@ -83,7 +83,7 @@ class ImageController extends Controller
      * @SWG\Post(
      *      path="/images/",
      *      tags={"image"},
-     *      summary="Add image. Not available from here now",
+     *      summary="Upload image",
      *      @SWG\Parameter(
      *          in="formData",
      *          name="image",
