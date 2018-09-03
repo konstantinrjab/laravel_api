@@ -17,12 +17,10 @@ class Category extends Structure
         return self::KEY_MANY;
     }
 
-    public static function getOne($category, $items = null)
+    public static function getOne($category, $items = false)
     {
-        $key = self::getKeyOne();
-
         $structure = [
-            $key => [
+            self::getKeyOne() => [
                 'id' => $category->id,
                 'name' => $category->name,
                 'created_at' => $category->created_at->format('Y-m-d H:i:s'),
@@ -32,7 +30,7 @@ class Category extends Structure
         self::_addItemsCount($category, $structure);
 
         if ($items) {
-            $structure['category']['items'] = $items;
+            $structure[self::getKeyOne()]['items'] = $category->items;
         }
 
         return $structure;
@@ -45,6 +43,6 @@ class Category extends Structure
         } else {
             $count = 0;
         }
-        $structure['category']['items_count'] = $count;
+        $structure[self::getKeyOne()]['items_count'] = $count;
     }
 }

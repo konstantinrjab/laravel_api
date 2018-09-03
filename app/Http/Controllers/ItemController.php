@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\CategoryParameter;
 use App\Http\Structures\Error;
 use App\Parameter;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Item;
 use App\Http\Structures\Item as ItemStructure;
@@ -16,6 +14,8 @@ use App\ItemParameter;
 
 class ItemController extends Controller
 {
+    const TABLE_NAME = 'items';
+
     private $categoryParameters;
     private $itemParameters;
 
@@ -98,7 +98,9 @@ class ItemController extends Controller
             array_flip($this->itemParameters),
             array_flip($this->categoryParameters)
         );
+
         $additionalParameters = Parameter::whereIn('name', array_keys($additionalParameters))->get(['id', 'name']);
+        $data = false;
         foreach ($additionalParameters as $parameter) {
             $data[] = [
                 'item_id' => $itemID,
@@ -111,6 +113,29 @@ class ItemController extends Controller
         return $data;
     }
 
+    /**
+     * @SWG\Get(
+     *      path="/items/",
+     *      tags={"item"},
+     *      summary="Get list of items",
+     *      description="Returns list of items",
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *          @SWG\Schema(
+     *              @SWG\Property(
+     *                  property="items",
+     *                  type="array",
+     *                  @SWG\Items(ref="#definitions/item")
+     *              ),
+     *          ),
+     *     ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *     ),
+     * )
+     */
     public function index()
     {
         $items = Item::all();
@@ -120,11 +145,10 @@ class ItemController extends Controller
     /**
      * @SWG\Get(
      *      path="/items/{itemID}/",
-     *      operationId="getItem",
-     *      tags={"items"},
-     *      summary="Get product",
-     *      description="Returns product",
-     *      @SWG\ItemParameter(
+     *      tags={"item"},
+     *      summary="Get item",
+     *      description="Returns item",
+     *      @SWG\Parameter(
      *           name="itemID",
      *           in="path",
      *           description="Item ID",
@@ -134,35 +158,90 @@ class ItemController extends Controller
      *      @SWG\Response(
      *          response=200,
      *          description="successful operation",
-     *              @SWG\Schema(
-     *                  @SWG\Property(
-     *                      property="item",
-     *                      type="object",
-     *                      ref="#definitions/item"
-     *                  ),
-     *              ),
+     *          @SWG\Schema(
+     *              ref="#definitions/item"
+     *          ),
      *     ),
      *     @SWG\Response(
-     *          response=400,
-     *          description="Bad request"),
+     *          response="default",
+     *          description="Error",
      *     )
-     *
-     * Returns item
+     *  )
      */
     public function show($itemID)
     {
-        $item = Item::with('category', 'images')->find($itemID);
-        if (is_null($item)) {
-            throw new ModelNotFoundException();
-        }
-//        dd($item->images);
+        $this->existOrDie($this::TABLE_NAME, $itemID);
+
+        $item = Item::with('category')->find($itemID);
         return ItemStructure::getOne($item, true);
     }
 
+    /**
+     * @SWG\Post(
+     *      path="/items/",
+     *      tags={"categoryParameter"},
+     *      summary="Add categoryParameter",
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="category_id",
+     *          type="integer",
+     *          required=true,
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="name",
+     *          type="string",
+     *          required=true,
+     *          @SWG\Schema(
+     *              example="test name 1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="sku",
+     *          type="string",
+     *          required=true,
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="price",
+     *          type="string",
+     *          required=true,
+     *          @SWG\Schema(
+     *              example="200"
+     *          ),
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *          @SWG\Schema(
+     *              ref="#definitions/item"
+     *          ),
+     *     ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              ref="#definitions/error"
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     */
     public function store(Request $request)
     {
         $rules = $this->_getValidationRules($request);
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make(
+            $request->all(),
+            $rules,
+            ['required' => 'Missing item or category parameter: :attribute']
+        );
 
         if ($validator->fails()) {
             return Error::getStructure(
@@ -177,7 +256,9 @@ class ItemController extends Controller
             ItemParameter::insert($categoryParameters);
 
             $additionalParameters = $this->_prepareAdditionalParameters($request->all(), $item->id);
-            ItemParameter::insert($additionalParameters);
+            if($additionalParameters){
+                ItemParameter::insert($additionalParameters);
+            }
 
             DB::commit();
             return ItemStructure::getOne($item, true);
@@ -187,12 +268,74 @@ class ItemController extends Controller
         }
     }
 
+    /**
+     * @SWG\Post(
+     *      path="/items/{itemID}/",
+     *      tags={"item"},
+     *      summary="Update item",
+     *      @SWG\Parameter(
+     *          in="path",
+     *          name="itemID",
+     *          required=true,
+     *          type="integer",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="category_id",
+     *          type="integer",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="name",
+     *          type="string",
+     *          @SWG\Schema(
+     *              example="test name 1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="sku",
+     *          type="string",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="price",
+     *          type="string",
+     *          @SWG\Schema(
+     *              example="200"
+     *          ),
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *              @SWG\Schema(
+     *                  ref="#definitions/item"
+     *              ),
+     *          ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              ref="#definitions/error"
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     */
     public function update(Request $request, $itemID)
     {
+        $this->existOrDie($this::TABLE_NAME, $itemID);
         $item = Item::find($itemID);
-        if (is_null($item)) {
-            throw new ModelNotFoundException();
-        }
+
         $rules = $this->getUpdateRules();
         $validator = Validator::make($request->all(), $rules);
 
@@ -207,8 +350,38 @@ class ItemController extends Controller
         return response()->json(ItemStructure::getOne($item, true), 200);
     }
 
+    /**
+     * @SWG\Delete(
+     *      path="/items/{itemID}",
+     *      tags={"item"},
+     *      summary="Delete item",
+     *      @SWG\Parameter(
+     *          in="path",
+     *          name="itemID",
+     *          required=true,
+     *          type="integer",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *     ),
+     *     @SWG\Response(
+     *          response=204,
+     *          description="successful operation",
+     *     ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              ref="#definitions/error"
+     *          )
+     *      ),
+     *     security={{"api_key":{}}}
+     *  )
+     */
     public function delete($itemID)
     {
+        $this->existOrDie($this::TABLE_NAME, $itemID);
+
         return $this->deleteIdentByID($itemID, '\App\Item');
     }
 }

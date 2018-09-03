@@ -26,12 +26,13 @@ class Image extends Structure
     public static function getOne($image)
     {
         $structure = [
-                'id' => $image->id,
+            self::getKeyOne() => ['id' => $image->id,
                 'item_id' => $image->item_id,
                 'order' => $image->order,
-                'path' => 'storage/'.$image->path,
+                'path' => 'storage/' . $image->path,
                 'created_at' => $image->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $image->updated_at->format('Y-m-d H:i:s'),
+            ]
         ];
 
         return $structure;

@@ -6,6 +6,13 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
 {
+    private $_password;
+
+    public function __construct()
+    {
+        $this->_password = Hash::make('secret_pass');
+    }
+
     /**
      * Run the database seeds.
      *
@@ -13,38 +20,31 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $password = Hash::make('toptal');
-
         try {
             User::truncate();
         } catch (Exception $e) {
-            $this->_addAmin($password);
+            $this->_addAdmin();
             return;
         }
         $faker = \Faker\Factory::create();
 
-        User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@test.com',
-            'password' => $password,
-            'api_token' => 'Buhq0cKoBoxWbOecK3oynYK536lXc6Kmi3hR90G5kD6rFB7FgBAkFYA1C8ZN'
-        ]);
+        $this->_addAdmin();
 
         for ($i = 0; $i < 10; $i++) {
             User::create([
                 'name' => $faker->name,
                 'email' => $faker->email,
-                'password' => $password,
+                'password' => $this->_password,
             ]);
         }
     }
 
-    private function _addAmin($password)
+    private function _addAdmin()
     {
         User::create([
             'name' => 'Administrator',
             'email' => 'admin@test.com',
-            'password' => $password,
+            'password' => $this->_password,
             'api_token' => 'Buhq0cKoBoxWbOecK3oynYK536lXc6Kmi3hR90G5kD6rFB7FgBAkFYA1C8ZN'
         ]);
     }

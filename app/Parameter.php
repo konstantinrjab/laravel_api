@@ -5,30 +5,34 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /** @SWG\Tag(
- *   name="parameters",
+ *   name="parameter",
  *   description="products have parameters"
  * )
  *
  * @SWG\Definition(
  *   definition="parameter",
  *   @SWG\Property(
- *      property="id",
- *      type="integer",
- *      description="ItemParameter ID"
- *   ),
- *   @SWG\Property(
- *      property="name",
- *      type="string",
- *      description="ItemParameter Name"
- *   ),
- *   @SWG\Property(
- *      property="created_at",
+ *      property="parameter",
  *      type="object",
- *   ),
- *   @SWG\Property(
- *      property="updated_at",
- *      type="object",
- *   ),
+ *      @SWG\Property(
+ *         property="id",
+ *         type="integer",
+ *         description="Parameter ID"
+ *      ),
+ *      @SWG\Property(
+ *         property="name",
+ *         type="string",
+ *         description="Parameter Name"
+ *      ),
+ *      @SWG\Property(
+ *         property="created_at",
+ *         type="string",
+ *      ),
+ *      @SWG\Property(
+ *         property="updated_at",
+ *         type="string",
+ *      ),
+ *   )
  * )
  */
 class Parameter extends Model

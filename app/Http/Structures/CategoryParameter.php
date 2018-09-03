@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: konstantin
- * Date: 08/16/18
- * Time: 10:41 PM
- */
 
 namespace App\Http\Structures;
 
@@ -27,7 +21,7 @@ class CategoryParameter extends Structure
     public static function getOne($parameter)
     {
         return [
-            'parameter' => [
+            self::getKeyOne() => [
                 'id' => $parameter->id,
                 'category_id' => $parameter->category_id,
                 'parameter_id' => $parameter->parameter_id,

@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 
 class ImageController extends Controller
 {
+    const TABLE_NAME = 'images';
+
     private function _getRequestValues($request)
     {
         return [
@@ -29,47 +31,45 @@ class ImageController extends Controller
     protected function getRules()
     {
         return [
-            'item_id' => 'required|exists:items,id',
-            'order' => 'required|integer',
+            'item_id' => 'required|integer|exists:items,id',
+            'order' => 'required|integer|min:0|max:127',
             'image' => 'required|image|mimes:jpeg|max:2048'
 //            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ];
     }
-    /**
-     * @SWG\Get(
-     *      path="/parameters",
-     *      operationId="getParametersList",
-     *      tags={"parameters"},
-     *      summary="Get list of parameters",
-     *      description="Returns list of parameters",
-     *      @SWG\Response(
-     *          response=200,
-     *          description="successful operation",
-     *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="count",
-     *                  type="integer",
-     *              ),
-     *              @SWG\Property(
-     *                  property="parameters",
-     *                  type="array",
-     *                  @SWG\Items(ref="#definitions/parameter")
-     *              ),
-     *          ),
-     *     ),
-     *     @SWG\Response(
-     *          response=400,
-     *          description="Bad request"),
-     *     )
-     *
-     * Returns list of projects
-     */
+
 //    public function index()
 //    {
 //        $parameters = Image::all();
 //        return ImageStructure::getMany($parameters);
 //    }
 
+    /**
+     * @SWG\Get(
+     *      path="/images/{imageID}/",
+     *      tags={"image"},
+     *      summary="Get image",
+     *      description="Returns image",
+     *      @SWG\Parameter(
+     *           name="imageID",
+     *           in="path",
+     *           description="Image ID",
+     *           required=true,
+     *           type="integer",
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *          @SWG\Schema(
+     *              ref="#definitions/image"
+     *          ),
+     *     ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *     )
+     *  )
+     */
     public function show($imageID)
     {
         $image = Image::find($imageID);
@@ -79,6 +79,54 @@ class ImageController extends Controller
         return ImageStructure::getOne($image);
     }
 
+    /**
+     * @SWG\Post(
+     *      path="/images/",
+     *      tags={"image"},
+     *      summary="Upload image",
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="image",
+     *          type="file",
+     *          required=true,
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="item_id",
+     *          type="integer",
+     *          required=true,
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="order",
+     *          type="integer",
+     *          required=true,
+     *          minimum=0,
+     *          maximum=127,
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *          @SWG\Schema(
+     *              ref="#definitions/image"
+     *          ),
+     *     ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              ref="#definitions/error"
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     */
     public function store(Request $request)
     {
         $rules = $this->getRules();
@@ -147,8 +195,11 @@ class ImageController extends Controller
         return response()->json(ParameterStructure::getOne($image), 200);
     }
 
+    //ADD delete image instance
     public function delete($imageID)
     {
+        $this->existOrDie($this::TABLE_NAME, $imageID);
+
         return $this->deleteIdentByID($imageID, '\App\Image');
     }
 }
