@@ -32,7 +32,7 @@ class ImageController extends Controller
     {
         return [
             'item_id' => 'required|integer|exists:items,id',
-            'order' => 'required|integer',
+            'order' => 'required|integer|min:0|max:127',
             'image' => 'required|image|mimes:jpeg|max:2048'
 //            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ];
@@ -44,6 +44,32 @@ class ImageController extends Controller
 //        return ImageStructure::getMany($parameters);
 //    }
 
+    /**
+     * @SWG\Get(
+     *      path="/images/{imageID}/",
+     *      tags={"image"},
+     *      summary="Get image",
+     *      description="Returns image",
+     *      @SWG\Parameter(
+     *           name="imageID",
+     *           in="path",
+     *           description="Image ID",
+     *           required=true,
+     *           type="integer",
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *          @SWG\Schema(
+     *              ref="#definitions/image"
+     *          ),
+     *     ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *     )
+     *  )
+     */
     public function show($imageID)
     {
         $image = Image::find($imageID);
@@ -53,6 +79,54 @@ class ImageController extends Controller
         return ImageStructure::getOne($image);
     }
 
+    /**
+     * @SWG\Post(
+     *      path="/images/",
+     *      tags={"image"},
+     *      summary="Add image. Not available from here now",
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="image",
+     *          type="file",
+     *          required=true,
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="item_id",
+     *          type="integer",
+     *          required=true,
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="order",
+     *          type="integer",
+     *          required=true,
+     *          minimum=0,
+     *          maximum=127,
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *          @SWG\Schema(
+     *              ref="#definitions/image"
+     *          ),
+     *     ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              ref="#definitions/error"
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     */
     public function store(Request $request)
     {
         $rules = $this->getRules();
@@ -121,6 +195,7 @@ class ImageController extends Controller
         return response()->json(ParameterStructure::getOne($image), 200);
     }
 
+    //ADD delete image instance
     public function delete($imageID)
     {
         $this->existOrDie($this::TABLE_NAME, $imageID);
