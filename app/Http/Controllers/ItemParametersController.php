@@ -12,7 +12,7 @@ use Validator;
 
 class ItemParametersController extends Controller
 {
-    const TABLE_NAME = 'item_parameters';
+    const TABLE_NAME = 'item_parameter';
 
     private function _getRequestValues($request)
     {
@@ -34,7 +34,7 @@ class ItemParametersController extends Controller
 
     /**
      * @SWG\Get(
-     *      path="items/parameters/",
+     *      path="/items/parameters/",
      *      tags={"itemParameter"},
      *      summary="Get list of itemParameters",
      *      description="Returns list of itemParameters",
@@ -42,10 +42,6 @@ class ItemParametersController extends Controller
      *          response=200,
      *          description="successful operation",
      *          @SWG\Schema(
-     *              @SWG\Property(
-     *                  property="count",
-     *                  type="integer",
-     *              ),
      *              @SWG\Property(
      *                  property="parameters",
      *                  type="array",
@@ -67,6 +63,55 @@ class ItemParametersController extends Controller
         return ItemParameterStructure::getMany($parameters);
     }
 
+    /**
+     * @SWG\Post(
+     *      path="/items/parameters/",
+     *      tags={"itemParameter"},
+     *      summary="Add itemParameter",
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="item_id",
+     *          type="integer",
+     *          required=true,
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="parameter_id",
+     *          type="string",
+     *          required=true,
+     *          @SWG\Schema(
+     *              example="test name 1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="value",
+     *          type="string",
+     *          required=true,
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *              @SWG\Schema(
+     *                  ref="#definitions/itemParameter"
+     *              ),
+     *          ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              ref="#definitions/error"
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     */
     public function store(Request $request)
     {
         $values = $this->_getRequestValues($request);
@@ -87,6 +132,62 @@ class ItemParametersController extends Controller
         }
     }
 
+
+    /**
+     * @SWG\Post(
+     *      path="/items/parameters/{parameterID}/",
+     *      tags={"itemParameter"},
+     *      summary="Update itemParameter",
+     *      @SWG\Parameter(
+     *          in="path",
+     *          name="parameterID",
+     *          required=true,
+     *          type="integer",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="item_id",
+     *          type="integer",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="parameter_id",
+     *          type="string",
+     *          @SWG\Schema(
+     *              example="test name 1"
+     *          ),
+     *      ),
+     *      @SWG\Parameter(
+     *          in="formData",
+     *          name="value",
+     *          type="string",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *      ),
+     *      @SWG\Response(
+     *          response=200,
+     *          description="successful operation",
+     *              @SWG\Schema(
+     *                  ref="#definitions/itemParameter"
+     *              ),
+     *          ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              ref="#definitions/error"
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     */
     public function update(Request $request, $parameterID)
     {
         $this->existOrDie($this::TABLE_NAME, $parameterID);
@@ -107,6 +208,34 @@ class ItemParametersController extends Controller
         return response()->json(ItemParameterStructure::getOne($parameter), 200);
     }
 
+    /**
+     * @SWG\Delete(
+     *      path="/items/parameters/{parameterID}/",
+     *      tags={"itemParameter"},
+     *      summary="Delete itemParameter",
+     *      @SWG\Parameter(
+     *          in="path",
+     *          name="parameterID",
+     *          required=true,
+     *          type="integer",
+     *          @SWG\Schema(
+     *              example="1"
+     *          ),
+     *     ),
+     *     @SWG\Response(
+     *          response=204,
+     *          description="successful operation",
+     *     ),
+     *     @SWG\Response(
+     *          response="default",
+     *          description="Error",
+     *          @SWG\Schema(
+     *              ref="#definitions/error"
+     *          )
+     *     ),
+     *     security={{"api_key":{}}}
+     *  )
+     */
     public function delete($parameterID)
     {
         $this->existOrDie($this::TABLE_NAME, $parameterID);

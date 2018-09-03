@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /** @SWG\Definition(
  *   definition="itemParameter",
  *   @SWG\Property(
- *      property="itemParameter",
+ *      property="parameter",
  *      type="object",
  *      @SWG\Property(
  *         property="id",
