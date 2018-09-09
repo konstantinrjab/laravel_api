@@ -1,5 +1,8 @@
 <?php
 
+$url = $app->make('url')->to('/');
+$baseUrl = substr($url, strpos($url, '//') + 2).'/api';
+
 return [
     'api' => [
         /*
@@ -223,6 +226,6 @@ return [
     |--------------------------------------------------------------------------
      */
     'constants' => [
-        'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', '127.0.0.1:8000/api'),
+        'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', $baseUrl),
     ],
 ];
